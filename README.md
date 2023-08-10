@@ -15,3 +15,4 @@ My data portfolio for data analyst role
 - Essential Python for Data Analyst
 - Dashboard
 
+You can find me on: https://www.linkedin.com/in/suthisak-muanchaona-832177190/
