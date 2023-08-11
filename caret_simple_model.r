@@ -64,8 +64,9 @@ cal_rmse(test_data$medv, p)
 ## save model file .RDS
 saveRDS(model, "lm_model.RDS")
 
-
-
+## when use model
+model <- readRDS("lm_model.RDS")
+predict(model, newdata = BostonHousing[1:20, ])
 
 
 
