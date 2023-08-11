@@ -36,6 +36,40 @@ model <- train(medv ~ rm + b + crim,
                data = train_data,
                method = "lm")
 
+model$finalModel
+
+##score predict
+p <- predict(model, newdata = test_data)
+
+##evaluate
+cal_mae <- function(actual, predict) {
+  error <- actual - predict
+  mean(abs(error))
+}
+
+cal_mse <- function(actual, predict) {
+  error <- actual - predict
+  mean(error**2)
+}
+
+cal_rmse <- function(actual, predict) {
+  error <- actual - predict
+  sqrt(mean(error**2))
+}
+
+cal_mae(test_data$medv, p)
+cal_mse(test_data$medv, p)
+cal_rmse(test_data$medv, p)
+
+## save model file .RDS
+saveRDS(model, "lm_model.RDS")
+
+
+
+
+
+
+
 
 
 
