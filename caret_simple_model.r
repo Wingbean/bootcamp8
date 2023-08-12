@@ -99,8 +99,80 @@ model <- train(medv ~ rm + b + crim,
                preProcess = c("center", "scale"),
                trControl = ctrl)
 
+## K-nearest neighbour "knn"
 
+set.seed(42)
+ctrl <- trainControl(
+  method = "cv", #cv mean k-fold CV
+  number = 5, #number either 5 or 10
+  verboseIter = TRUE #everytime train show iteration in console
+)
 
+model <- train(medv ~ rm + b + crim + lstat + age,
+               data = train_data,
+               method = "knn",
+               preProcess = c("range", "zv", "nzv"),
+               trControl = ctrl)
 
+## hyperparameter tuning in train process
 
+model <- train(medv ~ rm + b + crim + lstat + age,
+               data = train_data,
+               method = "knn",
+               preProcess = c("range", "zv", "nzv"),
+               tuneLength = 5,
+               trControl = ctrl)
 
+## train final model use specific K=5
+
+model_k5 <- train(medv ~ rm + b + crim + lstat + age,
+               data = train_data,
+               method = "knn",
+               tuneGrid = data.frame(k=5),
+               preProcess = c("range", "zv", "nzv"),
+               trControl = trainControl(method = "none"))
+
+# predict train and test from model_k5
+
+p_train <- predict(model_k5)
+p_test <- predict(model_k5, newdata = test_data)
+
+#evaluate model_k5
+rmse_train <- cal_rmse(train_data$medv, p_train)
+rmse_test <- cal_rmse(test_data$medv, p_test)
+rmse_train; rmse_test
+
+## tuneGrid specific 5, 7, 13 etc
+
+set.seed(42)
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  verboseIter = TRUE
+)
+
+model <- train(medv ~ rm + b + crim + lstat + age,
+                  data = train_data,
+                  method = "knn",
+                  tuneGrid = data.frame(k=c(5, 7, 13)),
+                  preProcess = c("center","scale"),
+                  trControl = ctrl)
+
+## Tune Metric RMSE --> Rsquared
+model <- train(medv ~ rm + b + crim + lstat + age,
+               data = train_data,
+               method = "knn",
+               metric ="Rsquared",
+               tuneGrid = data.frame(k=c(5, 7, 13)),
+               preProcess = c("center","scale"),
+               trControl = ctrl)
+
+## Technic trainControl repeatCV
+
+set.seed(42)
+ctrl <- trainControl(
+  method = "repeatedcv",
+  number = 5,
+  repeats = 5,
+  verboseIter = TRUE
+)
