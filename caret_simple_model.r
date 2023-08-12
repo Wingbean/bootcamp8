@@ -68,7 +68,19 @@ saveRDS(model, "lm_model.RDS")
 model <- readRDS("lm_model.RDS")
 predict(model, newdata = BostonHousing[1:20, ])
 
+## Train Control
+## Change resampling boot, LOOCV, K-fold
+set.seed(42)
+ctrl <- trainControl(
+  method = "cv", #cv mean k-fold CV
+  number = 5, #number either 5 or 10
+  verboseIter = TRUE #everytime train show iteration in console
+)
 
+model <- train(medv ~ rm + b + crim,
+               data = train_data,
+               method = "lm",
+               trControl = ctrl)
 
 
 
