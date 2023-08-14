@@ -29,7 +29,7 @@ test_data <- prep_data[[2]]
 
 # Train
 model <- train(Price ~ .,
-               data = train_data,
+               data = train_data[ ,-c(1,2)],
                method = "lm")
 
 # score predict
@@ -57,7 +57,7 @@ cal_mse(test_data$Price, p)
 cal_rmse(test_data$Price, p)
 
 varImp(model)
-#############################################
+##-----------------------------------------##
 ## log price for correct rt skew
 
 df1_log <- df1 %>%
@@ -74,9 +74,9 @@ test_data_log <- prep_data_log[[2]]
 # Train + cal train error from exp(log)
 set.seed(42)
 model_log <- train(log_price ~ .,
-               data = train_data_log[ ,-23],
+               data = train_data_log[ , -c(1,2,23)], #remove price,id,date
                method = "lm")
-#[ , -c(1,2,23)]
+
 p_log_train <- predict(model_log, newdata = train_data_log)
 
 paste("MAE_expo_train : ", cal_mae(exp(train_data_log$log_price), exp(p_log_train)))
@@ -116,39 +116,71 @@ paste("RMSE_log_train : ", cal_rmse(train_data_log$log_price, p_log_train))
 model_log
 #
 
+##-----------------------------------------##
+# select varImp from above model for create new model
+# subset data to df1_s
 
+df1_s <- df1_log %>%
+  select(lat = Lattitude,
+         grade = `grade of the house`,
+         bld_yr = `Built Year`,
+         lv_area = `living area`,
+         no_view = `number of views`,
+         log_price,Price)
 
+split_data(df1_s)
+prep_data_s <- split_data(df1_s)
+train_data_s <- prep_data_s[[1]]
+test_data_s <- prep_data_s[[2]]
 
+set.seed(42)
+model_log_s <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
+                   data = train_data_s,
+                   method = "lm")
 
+p_log_s_train <- predict(model_log_s, newdata = train_data_s)
 
+## evaluate train model_log_s
+paste("MAE_log_s_train : ", cal_mae(train_data_s$log_price, p_log_s_train))
+paste("MSE_log_s_train : ", cal_mse(train_data_s$log_price, p_log_s_train))
+paste("RMSE_log_s_train : ", cal_rmse(train_data_s$log_price, p_log_s_train))
 
+paste("MAE_expo_s_train : ", cal_mae(exp(train_data_s$log_price), exp(p_log_s_train)))
+paste("MSE_expo_s_train : ", cal_mse(exp(train_data_s$log_price), exp(p_log_s_train)))
+paste("RMSE_expo_s_train : ", cal_rmse(exp(train_data_s$log_price), exp(p_log_s_train)))
 
+# test model_log_s
+p_log_s_test <- predict(model_log_s, newdata = test_data_s)
 
+# evaluate test model_log_s
+paste("MAE_log_s_test : ", cal_mae(test_data_s$log_price, p_log_s_test))
+paste("MSE_log_s_test : ", cal_mse(test_data_s$log_price, p_log_s_test))
+paste("RMSE_log_s_test : ", cal_rmse(test_data_s$log_price, p_log_s_test))
 
-varImp(model)
+paste("MAE_expo_s_test : ", cal_mae(exp(test_data_s$log_price), exp(p_log_s_test)))
+paste("MSE_expo_s_test : ", cal_mse(exp(test_data_s$log_price), exp(p_log_s_test)))
+paste("RMSE_expo_s_test : ", cal_rmse(exp(test_data_s$log_price), exp(p_log_s_test)))
 
+##-----------------------------------------##
 
+# TrainControl repeatCV
 
+set.seed(42)
+ctrl <- trainControl(
+  method = "repeatedcv",
+  number = 5,
+  repeats = 5,
+  verboseIter = TRUE
+)
 
+#~~~~~~~~~~~~Final model~~~~~~~~~~~~~~~~#
 
-
-
-
-
-
-
-########################################################
-df1 <- df1 %>%
-  select(grade = `grade of the house`,
-         school = `Number of schools nearby`,
-         distair = `Distance from the airport`,
-         lvarea = `living area`,
-         bedroom = `number of bedrooms`,
-         Price)
-
-model <- train(Price ~ grade + school + distair + lvarea,
-               data = train_data,
-               method = "lm")
+set.seed(42)
+model_log_s <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
+                     data = train_data_s,
+                     method = "lm",
+                     preProcess = c("center", "scale"),
+                     trControl = ctrl)
 
 
 
