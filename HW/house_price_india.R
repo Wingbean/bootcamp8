@@ -51,10 +51,44 @@ cal_rmse <- function(actual, predict) {
   sqrt(mean(error**2))
 }
 
-model
-cal_mae(test_data$Price, p)
-cal_mse(test_data$Price, p)
-cal_rmse(test_data$Price, p)
+r_train <- function(A,P) {
+  mae_log <- cal_mae(A$log_price, P)
+  mse_log <- cal_mse(A$log_price, P)
+  rmse_log <- cal_rmse(A$log_price, P)
+  mae_expo <- cal_mae(exp(A$log_price), exp(P))
+  mse_expo <- cal_mse(exp(A$log_price), exp(P))
+  rmse_expo <- cal_rmse(exp(A$log_price), exp(P))
+  print("--Evaulation of TRAIN--");
+  print(paste("MAE_log_train : ",mae_log)) ;
+  print(paste("MSE_log_train : ",mse_log)) ;
+  print(paste("RMSE_log_train : ",rmse_log)) ;
+  print(paste("MAE_expo_train : ",mae_expo)) ;
+  print(paste("MSE_expo_train : ",mse_expo)) ;
+  print(paste("RMSE_expo_train : ",rmse_expo))
+}
+
+r_test <- function(A,P) {
+  mae_log <- cal_mae(A$log_price, P)
+  mse_log <- cal_mse(A$log_price, P)
+  rmse_log <- cal_rmse(A$log_price, P)
+  mae_expo <- cal_mae(exp(A$log_price), exp(P))
+  mse_expo <- cal_mse(exp(A$log_price), exp(P))
+  rmse_expo <- cal_rmse(exp(A$log_price), exp(P))
+  print("--Evaulation of TEST--");
+  print(paste("MAE_log_test : ",mae_log)) ;
+  print(paste("MSE_log_test : ",mse_log)) ;
+  print(paste("RMSE_log_test : ",rmse_log)) ;
+  print(paste("MAE_expo_test : ",mae_expo)) ;
+  print(paste("MSE_expo_test : ",mse_expo)) ;
+  print(paste("RMSE_expo_test : ",rmse_expo))
+}
+
+print(paste("MAE_test : "  , cal_mae(test_data$Price, p)))
+print(paste("MSE_test : "  , cal_mse(test_data$Price, p)))
+print(paste("RMSE_test : " , cal_rmse(test_data$Price, p)))
+#cal_mae(test_data$Price, p)
+#cal_mse(test_data$Price, p)
+#cal_rmse(test_data$Price, p)
 
 varImp(model)
 ##-----------------------------------------##
@@ -187,21 +221,7 @@ model_log_s <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
 p_log_s_train <- predict(model_log_s, newdata = train_data_s)
 
 ## evaluate train model_log_s
-r_train <- function(A,P) {
-  mae_log <- cal_mae(A$log_price, P)
-  mse_log <- cal_mse(A$log_price, P)
-  rmse_log <- cal_rmse(A$log_price, P)
-  mae_expo <- cal_mae(exp(A$log_price), exp(P))
-  mse_expo <- cal_mse(exp(A$log_price), exp(P))
-  rmse_expo <- cal_rmse(exp(A$log_price), exp(P))
-  print("--Evaulation of TRAIN--");
-  print(paste("MAE_log_train : ",mae_log)) ;
-  print(paste("MSE_log_train : ",mse_log)) ;
-  print(paste("RMSE_log_train : ",rmse_log)) ;
-  print(paste("MAE_expo_train : ",mae_expo)) ;
-  print(paste("MSE_expo_train : ",mse_expo)) ;
-  print(paste("RMSE_expo_train : ",rmse_expo))
-}
+
 
 r_train(train_data_s, p_log_s_train)
 
@@ -218,21 +238,6 @@ print(model_log_s)
 p_log_s_test <- predict(model_log_s, newdata = test_data_s)
 
 # evaluate test model_log_s
-r_test <- function(A,P) {
-  mae_log <- cal_mae(A$log_price, P)
-  mse_log <- cal_mse(A$log_price, P)
-  rmse_log <- cal_rmse(A$log_price, P)
-  mae_expo <- cal_mae(exp(A$log_price), exp(P))
-  mse_expo <- cal_mse(exp(A$log_price), exp(P))
-  rmse_expo <- cal_rmse(exp(A$log_price), exp(P))
-  print("--Evaulation of TEST--");
-  print(paste("MAE_log_test : ",mae_log)) ;
-  print(paste("MSE_log_test : ",mse_log)) ;
-  print(paste("RMSE_log_test : ",rmse_log)) ;
-  print(paste("MAE_expo_test : ",mae_expo)) ;
-  print(paste("MSE_expo_test : ",mse_expo)) ;
-  print(paste("RMSE_expo_test : ",rmse_expo))
-}
 
 r_test(test_data_s, p_log_s_test)
 
