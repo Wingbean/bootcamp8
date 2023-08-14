@@ -74,9 +74,9 @@ test_data_log <- prep_data_log[[2]]
 # Train + cal train error from exp(log)
 set.seed(42)
 model_log <- train(log_price ~ .,
-               data = train_data_log[ , -c(1,2,23)],
+               data = train_data_log[ ,-23],
                method = "lm")
-
+#[ , -c(1,2,23)]
 p_log_train <- predict(model_log, newdata = train_data_log)
 
 paste("MAE_expo_train : ", cal_mae(exp(train_data_log$log_price), exp(p_log_train)))
