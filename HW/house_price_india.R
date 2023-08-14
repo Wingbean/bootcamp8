@@ -162,6 +162,10 @@ paste("MSE_expo_s_test : ", cal_mse(exp(test_data_s$log_price), exp(p_log_s_test
 paste("RMSE_expo_s_test : ", cal_rmse(exp(test_data_s$log_price), exp(p_log_s_test)))
 
 ##-----------------------------------------##
+##-----------------------------------------##
+##-----------------------------------------##
+
+#~~~~~~~~~~~~~~~~Final model~~~~~~~~~~~~~~~~#
 
 # TrainControl repeatCV
 
@@ -173,8 +177,6 @@ ctrl <- trainControl(
   verboseIter = TRUE
 )
 
-#~~~~~~~~~~~~Final model~~~~~~~~~~~~~~~~#
-
 set.seed(42)
 model_log_s <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
                      data = train_data_s,
@@ -182,6 +184,30 @@ model_log_s <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
                      preProcess = c("center", "scale"),
                      trControl = ctrl)
 
+p_log_s_train <- predict(model_log_s, newdata = train_data_s)
+
+## evaluate train model_log_s
+paste("MAE_log_s_train : ", cal_mae(train_data_s$log_price, p_log_s_train))
+paste("MSE_log_s_train : ", cal_mse(train_data_s$log_price, p_log_s_train))
+paste("RMSE_log_s_train : ", cal_rmse(train_data_s$log_price, p_log_s_train))
+
+paste("MAE_expo_s_train : ", cal_mae(exp(train_data_s$log_price), exp(p_log_s_train)))
+paste("MSE_expo_s_train : ", cal_mse(exp(train_data_s$log_price), exp(p_log_s_train)))
+paste("RMSE_expo_s_train : ", cal_rmse(exp(train_data_s$log_price), exp(p_log_s_train)))
+
+# test model_log_s
+p_log_s_test <- predict(model_log_s, newdata = test_data_s)
+
+# evaluate test model_log_s
+paste("MAE_log_s_test : ", cal_mae(test_data_s$log_price, p_log_s_test))
+paste("MSE_log_s_test : ", cal_mse(test_data_s$log_price, p_log_s_test))
+paste("RMSE_log_s_test : ", cal_rmse(test_data_s$log_price, p_log_s_test))
+
+paste("MAE_expo_s_test : ", cal_mae(exp(test_data_s$log_price), exp(p_log_s_test)))
+paste("MSE_expo_s_test : ", cal_mse(exp(test_data_s$log_price), exp(p_log_s_test)))
+paste("RMSE_expo_s_test : ", cal_rmse(exp(test_data_s$log_price), exp(p_log_s_test)))
+
+##-----------------------------------------##
 
 
 
