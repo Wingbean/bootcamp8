@@ -264,8 +264,57 @@ model_log_s <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
                      trControl = ctrl)
 
 ##----------Summary Evaluation-------------##
-#create list MAE-train/test, MSE-train/test, RMSE-train/test, Rsquared train
-#create list model, model_log, model_log_s, model_lm_final
+
+#create vector model, model_log, model_log_s, model_lm_final
+model_name <- c("model",
+                "model_log",
+                "model_log_s",
+                "model_lm_final")
+
+#create vector MAE-train/test, MSE-train/test, RMSE-train/test, Rsquared train
+mae_train_log <- c(0,
+                   model_log_r_train[[1]],
+                   model_log_s_r_train[[1]],
+                   model_lm_final_r_train[[1]])
+
+mae_train <- c(model[[4]][[4]],
+               model_log_r_train[[4]],
+               model_log_s_r_train[[4]],
+               model_lm_final_r_train[[4]])
+
+
+mae_test 
+
+mse_train_log <- c(0, 
+                   model_log_r_train[[2]], 
+                   model_log_s_r_train[[2]], 
+                   model_lm_final_r_train[[2]])
+
+mse_train <- c(0, 
+               model_log_r_train[[5]], 
+               model_log_s_r_train[[5]], 
+               model_lm_final_r_train[[5]])
+
+mse_test
+
+rmse_train_log <- c(0, 
+                    model_log_r_train[[3]], 
+                    model_log_s_r_train[[3]], 
+                    model_lm_final_r_train[[3]])
+
+rmse_train <- c(model[[4]][[2]], 
+                model_log_r_train[[6]], 
+                model_log_s_r_train[[6]], 
+                model_lm_final_r_train[[6]])
+
+rmse_test
+rsquared_train <- c(model[[4]][[3]], 
+                    0, 
+                    0, 
+                    0)
+
+
+
 #then create df to compare evaluation
 
 
