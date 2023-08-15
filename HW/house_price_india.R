@@ -463,3 +463,4 @@ rsquared_model_train <- c(model[[4]][[3]],
                           model_lm_final[[4]][[3]],
                           model_knn_final[[4]][[3,3]])
 
+model_knn_final

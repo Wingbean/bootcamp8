@@ -807,8 +807,8 @@ technic</h2>
 ctrl &lt;- trainControl(
   method = &quot;repeatedcv&quot;,
   number = 5,
-  repeats = 5,
-  verboseIter = TRUE
+  repeats = 5
+  #verboseIter = TRUE
 )</code></pre>
 </div>
 <div id="train-final-model-df1_s-and-log_price" class="section level3">
@@ -821,58 +821,6 @@ ctrl &lt;- trainControl(
                      method = &quot;lm&quot;,
                      preProcess = c(&quot;center&quot;, &quot;scale&quot;),
                      trControl = ctrl)</code></pre>
-<pre><code>## + Fold1.Rep1: intercept=TRUE 
-## - Fold1.Rep1: intercept=TRUE 
-## + Fold2.Rep1: intercept=TRUE 
-## - Fold2.Rep1: intercept=TRUE 
-## + Fold3.Rep1: intercept=TRUE 
-## - Fold3.Rep1: intercept=TRUE 
-## + Fold4.Rep1: intercept=TRUE 
-## - Fold4.Rep1: intercept=TRUE 
-## + Fold5.Rep1: intercept=TRUE 
-## - Fold5.Rep1: intercept=TRUE 
-## + Fold1.Rep2: intercept=TRUE 
-## - Fold1.Rep2: intercept=TRUE 
-## + Fold2.Rep2: intercept=TRUE 
-## - Fold2.Rep2: intercept=TRUE 
-## + Fold3.Rep2: intercept=TRUE 
-## - Fold3.Rep2: intercept=TRUE 
-## + Fold4.Rep2: intercept=TRUE 
-## - Fold4.Rep2: intercept=TRUE 
-## + Fold5.Rep2: intercept=TRUE 
-## - Fold5.Rep2: intercept=TRUE 
-## + Fold1.Rep3: intercept=TRUE 
-## - Fold1.Rep3: intercept=TRUE 
-## + Fold2.Rep3: intercept=TRUE 
-## - Fold2.Rep3: intercept=TRUE 
-## + Fold3.Rep3: intercept=TRUE 
-## - Fold3.Rep3: intercept=TRUE 
-## + Fold4.Rep3: intercept=TRUE 
-## - Fold4.Rep3: intercept=TRUE 
-## + Fold5.Rep3: intercept=TRUE 
-## - Fold5.Rep3: intercept=TRUE 
-## + Fold1.Rep4: intercept=TRUE 
-## - Fold1.Rep4: intercept=TRUE 
-## + Fold2.Rep4: intercept=TRUE 
-## - Fold2.Rep4: intercept=TRUE 
-## + Fold3.Rep4: intercept=TRUE 
-## - Fold3.Rep4: intercept=TRUE 
-## + Fold4.Rep4: intercept=TRUE 
-## - Fold4.Rep4: intercept=TRUE 
-## + Fold5.Rep4: intercept=TRUE 
-## - Fold5.Rep4: intercept=TRUE 
-## + Fold1.Rep5: intercept=TRUE 
-## - Fold1.Rep5: intercept=TRUE 
-## + Fold2.Rep5: intercept=TRUE 
-## - Fold2.Rep5: intercept=TRUE 
-## + Fold3.Rep5: intercept=TRUE 
-## - Fold3.Rep5: intercept=TRUE 
-## + Fold4.Rep5: intercept=TRUE 
-## - Fold4.Rep5: intercept=TRUE 
-## + Fold5.Rep5: intercept=TRUE 
-## - Fold5.Rep5: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
 </div>
 <div id="calculate-train-error-2" class="section level3">
 <h3>4.2.2 calculate train error</h3>
@@ -916,14 +864,68 @@ p_lm_final_test &lt;- predict(model_lm_final, newdata = test_data_s)</code></pre
 ## [1] &quot;RMSE_model :  0.258095431757117&quot;</code></pre>
 </div>
 </div>
+<div id="switch-method-to-knn" class="section level2">
+<h2>Switch method to knn</h2>
+<pre class="r"><code>model_knn_final &lt;- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
+                         data = train_data_s,
+                         method = &quot;knn&quot;,
+                         tuneGrid = data.frame(k=c(5, 7, 13)),
+                         preProcess = c(&quot;center&quot;, &quot;scale&quot;),
+                         #preProcess = c(&quot;range&quot;, &quot;zv&quot;, &quot;nzv&quot;),
+                         trControl = ctrl)</code></pre>
+<div id="predict-train-model_knn_final" class="section level3">
+<h3>predict train model_knn_final</h3>
+<pre class="r"><code>p_knn_final_train &lt;- predict(model_knn_final, newdata = train_data_s)</code></pre>
+</div>
+<div id="evaluate-train-model_knn_final" class="section level3">
+<h3>evaluate train model_knn_final</h3>
+<pre class="r"><code>model_knn_final_r_train &lt;- r_train(train_data_s, p_knn_final_train, model_knn_final)</code></pre>
+<pre><code>## [1] &quot;--Evaulation of TRAIN--&quot;
+## [1] &quot;MAE_log_train :  0.140665174852055&quot;
+## [1] &quot;MSE_log_train :  0.0371433299380822&quot;
+## [1] &quot;RMSE_log_train :  0.192726048934964&quot;
+## [1] &quot;MAE_expo_train :  81946.2331718462&quot;
+## [1] &quot;MSE_expo_train :  25552644789.7944&quot;
+## [1] &quot;RMSE_expo_train :  159851.946468582&quot;
+## [1] &quot;MAE_model :  0.158835378279188&quot; &quot;MAE_model :  0.155883783285012&quot;
+## [3] &quot;MAE_model :  0.153229130059616&quot;
+## [1] &quot;Rsquared_model :  0.831110269286084&quot; &quot;Rsquared_model :  0.836307528904411&quot;
+## [3] &quot;Rsquared_model :  0.841479039253118&quot;
+## [1] &quot;RMSE_model :  0.21640668756905&quot;  &quot;RMSE_model :  0.212880120531821&quot;
+## [3] &quot;RMSE_model :  0.209466472413462&quot;</code></pre>
+</div>
+<div id="test-model_knn_final" class="section level3">
+<h3>test model_knn_final</h3>
+<pre class="r"><code>p_knn_final_test &lt;- predict(model_knn_final, newdata = test_data_s)</code></pre>
+</div>
+<div id="evaluate-test-model_knn_final" class="section level3">
+<h3>evaluate test model_knn_final</h3>
+<pre class="r"><code>model_knn_final_r_test &lt;- r_test(test_data_s, p_knn_final_test, model_knn_final)</code></pre>
+<pre><code>## [1] &quot;--Evaulation of TEST--&quot;
+## [1] &quot;MAE_log_test :  0.158201565950789&quot;
+## [1] &quot;MSE_log_test :  0.048164704298204&quot;
+## [1] &quot;RMSE_log_test :  0.219464585521683&quot;
+## [1] &quot;MAE_expo_test :  93951.1047196991&quot;
+## [1] &quot;MSE_expo_test :  44100247868.9621&quot;
+## [1] &quot;RMSE_expo_test :  210000.590163366&quot;
+## [1] &quot;MAE_model :  0.158835378279188&quot; &quot;MAE_model :  0.155883783285012&quot;
+## [3] &quot;MAE_model :  0.153229130059616&quot;
+## [1] &quot;Rsquared_model :  0.831110269286084&quot; &quot;Rsquared_model :  0.836307528904411&quot;
+## [3] &quot;Rsquared_model :  0.841479039253118&quot;
+## [1] &quot;RMSE_model :  0.21640668756905&quot;  &quot;RMSE_model :  0.212880120531821&quot;
+## [3] &quot;RMSE_model :  0.209466472413462&quot;</code></pre>
+</div>
+</div>
 <div id="summary-evaluation" class="section level2">
 <h2>Summary Evaluation</h2>
-<div id="create-vector-model-model_log-model_log_s-model_lm_final" class="section level3">
-<h3>create vector model, model_log, model_log_s, model_lm_final</h3>
+<div id="create-vector-model-model_log-model_log_s-model_lm_final-model_knn_final" class="section level3">
+<h3>create vector model, model_log, model_log_s, model_lm_final,
+model_knn_final</h3>
 <pre class="r"><code>model_name &lt;- c(&quot;model&quot;,
                 &quot;model_log&quot;,
                 &quot;model_log_s&quot;,
-                &quot;model_lm_final&quot;)</code></pre>
+                &quot;model_lm_final&quot;,
+                &quot;model_knn_final&quot;)</code></pre>
 </div>
 <div id="create-vector-mae-train-test-mse-train-test-rmse-train-test-rsquared-train" class="section level3">
 <h3>create vector MAE-train test, MSE-train test, RMSE-train test,
@@ -931,68 +933,80 @@ Rsquared train</h3>
 <pre class="r"><code>mae_train_log &lt;- c(0,
                    model_log_r_train[[1]],
                    model_log_s_r_train[[1]],
-                   model_lm_final_r_train[[1]])
+                   model_lm_final_r_train[[1]],
+                   model_knn_final_r_train[[1]])
 
 mae_train &lt;- c(model[[4]][[4]],
                model_log_r_train[[4]],
                model_log_s_r_train[[4]],
-               model_lm_final_r_train[[4]])
+               model_lm_final_r_train[[4]],
+               model_knn_final_r_train[[4]])
 
 mae_test_log &lt;- c(0,
                   model_log_r_test[[1]],
                   model_log_s_r_test[[1]],
-                  model_lm_final_r_test[[1]])
+                  model_lm_final_r_test[[1]],
+                  model_knn_final_r_test[[1]])
 
 mae_test &lt;- c(model[[4]][[4]],
               model_log_r_test[[4]],
               model_log_s_r_test[[4]],
-              model_lm_final_r_test[[4]])
+              model_lm_final_r_test[[4]],
+              model_knn_final_r_test[[4]])
 
 mse_train_log &lt;- c(0, 
                    model_log_r_train[[2]], 
                    model_log_s_r_train[[2]], 
-                   model_lm_final_r_train[[2]])
+                   model_lm_final_r_train[[2]],
+                   model_knn_final_r_train[[2]])
 
 mse_train &lt;- c(0, 
                model_log_r_train[[5]], 
                model_log_s_r_train[[5]], 
-               model_lm_final_r_train[[5]])
+               model_lm_final_r_train[[5]],
+               model_knn_final_r_train[[5]])
 
 mse_test_log &lt;- c(0, 
                   model_log_r_test[[2]], 
                   model_log_s_r_test[[2]], 
-                  model_lm_final_r_test[[2]])
+                  model_lm_final_r_test[[2]],
+                  model_knn_final_r_test[[2]])
 
 mse_test &lt;- c(0, 
               model_log_r_test[[5]], 
               model_log_s_r_test[[5]], 
-              model_lm_final_r_test[[5]])
-
+              model_lm_final_r_test[[5]],
+              model_knn_final_r_test[[5]])
 
 rmse_train_log &lt;- c(0, 
                     model_log_r_train[[3]], 
                     model_log_s_r_train[[3]], 
-                    model_lm_final_r_train[[3]])
+                    model_lm_final_r_train[[3]],
+                    model_knn_final_r_train[[3]])
 
 rmse_train &lt;- c(model[[4]][[2]], 
                 model_log_r_train[[6]], 
                 model_log_s_r_train[[6]], 
-                model_lm_final_r_train[[6]])
+                model_lm_final_r_train[[6]],
+                model_knn_final_r_train[[6]])
 
 rmse_test_log &lt;- c(0, 
                    model_log_r_test[[3]], 
                    model_log_s_r_test[[3]], 
-                   model_lm_final_r_test[[3]])
+                   model_lm_final_r_test[[3]],
+                   model_knn_final_r_test[[3]])
 
 rmse_test &lt;- c(model[[4]][[2]], 
                model_log_r_test[[6]], 
                model_log_s_r_test[[6]], 
-               model_lm_final_r_test[[6]])
+               model_lm_final_r_test[[6]],
+               model_knn_final_r_test[[6]])
 
 rsquared_model_train &lt;- c(model[[4]][[3]], 
                           model_log[[4]][[3]], 
                           model_log_s[[4]][[3]], 
-                          model_lm_final[[4]][[3]])</code></pre>
+                          model_lm_final[[4]][[3]],
+                          model_knn_final[[4]][[3,3]])</code></pre>
 </div>
 <div id="then-create-df-to-compare-evaluation" class="section level3">
 <h3>Then create df to compare evaluation</h3>
@@ -1007,26 +1021,47 @@ rsquared_model_train &lt;- c(model[[4]][[3]],
 </div>
 <div id="show-compare-error-evaluation-all-model" class="section level3">
 <h3>Show compare error evaluation all model</h3>
-<pre><code>##       model_name mae_train_log mae_train mae_test_log mae_test
-## 1          model     0.0000000  123219.8    0.0000000 123219.8
-## 2      model_log     0.1868766  106108.3    0.1934462 119667.9
-## 3    model_log_s     0.2000174  113400.4    0.2057683 128244.2
-## 4 model_lm_final     0.2000174  113400.4    0.2057683 128244.2</code></pre>
-<pre><code>##       model_name mse_train_log   mse_train mse_test_log     mse_test
-## 1          model    0.00000000           0   0.00000000            0
-## 2      model_log    0.05922343 32179140733   0.06483457 125501870361
-## 3    model_log_s    0.06655725 35852543842   0.07250331 196314300730
-## 4 model_lm_final    0.06655725 35852543842   0.07250331 196314300730</code></pre>
-<pre><code>##       model_name rmse_train_log rmse_train rmse_test_log rmse_test
-## 1          model      0.0000000   192549.8     0.0000000  192549.8
-## 2      model_log      0.2433587   179385.5     0.2546263  354262.4
-## 3    model_log_s      0.2579869   189347.7     0.2692644  443073.7
-## 4 model_lm_final      0.2579869   189347.7     0.2692644  443073.7</code></pre>
-<pre><code>##       model_name rsquared_model_train
-## 1          model            0.7110370
-## 2      model_log            0.7832968
-## 3    model_log_s            0.7574657
-## 4 model_lm_final            0.7591337</code></pre>
+<pre><code>##        model_name mae_train_log mae_train mae_test_log mae_test
+## 1           model     0.0000000 123219.80    0.0000000 123219.8
+## 2       model_log     0.1868766 106108.30    0.1934462 119667.9
+## 3     model_log_s     0.2000174 113400.36    0.2057683 128244.2
+## 4  model_lm_final     0.2000174 113400.36    0.2057683 128244.2
+## 5 model_knn_final     0.1406652  81946.23    0.1582016  93951.1</code></pre>
+<pre><code>##        model_name mse_train_log   mse_train mse_test_log     mse_test
+## 1           model    0.00000000           0   0.00000000            0
+## 2       model_log    0.05922343 32179140733   0.06483457 125501870361
+## 3     model_log_s    0.06655725 35852543842   0.07250331 196314300730
+## 4  model_lm_final    0.06655725 35852543842   0.07250331 196314300730
+## 5 model_knn_final    0.03714333 25552644790   0.04816470  44100247869</code></pre>
+<pre><code>##        model_name rmse_train_log rmse_train rmse_test_log rmse_test
+## 1           model      0.0000000   192549.8     0.0000000  192549.8
+## 2       model_log      0.2433587   179385.5     0.2546263  354262.4
+## 3     model_log_s      0.2579869   189347.7     0.2692644  443073.7
+## 4  model_lm_final      0.2579869   189347.7     0.2692644  443073.7
+## 5 model_knn_final      0.1927260   159851.9     0.2194646  210000.6</code></pre>
+<pre><code>##        model_name rsquared_model_train
+## 1           model            0.7110370
+## 2       model_log            0.7832968
+## 3     model_log_s            0.7574657
+## 4  model_lm_final            0.7591337
+## 5 model_knn_final            0.8414790</code></pre>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>CONCLUSION</h2>
+<div id="final-model-use-k-nearest-neighbors-method-and-train-control-for-minimize-all-error-and-maximize-rsquared-as-below.-tuning-the-parameter-resample-train-control-or-switch-method-may-buid-the-lower-error-model." class="section level4">
+<h4>Final model use K-Nearest Neighbors method and train control for
+minimize all error and maximize Rsquared as below. Tuning the parameter,
+resample, train control or switch method may buid the lower error
+model.</h4>
+<pre><code>##        model_name mae_train_log mae_train mae_test_log mae_test
+## 5 model_knn_final     0.1406652  81946.23    0.1582016  93951.1</code></pre>
+<pre><code>##        model_name mse_train_log   mse_train mse_test_log    mse_test
+## 5 model_knn_final    0.03714333 25552644790    0.0481647 44100247869</code></pre>
+<pre><code>##        model_name rmse_train_log rmse_train rmse_test_log rmse_test
+## 5 model_knn_final       0.192726   159851.9     0.2194646  210000.6</code></pre>
+<pre><code>##        model_name rsquared_model_train
+## 5 model_knn_final             0.841479</code></pre>
 </div>
 </div>
 </div>
