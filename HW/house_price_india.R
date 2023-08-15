@@ -282,8 +282,15 @@ mae_train <- c(model[[4]][[4]],
                model_log_s_r_train[[4]],
                model_lm_final_r_train[[4]])
 
+mae_test_log <- c(0,
+                  model_log_r_test[[1]],
+                  model_log_s_r_test[[1]],
+                  model_lm_final_r_test[[1]])
 
-mae_test 
+mae_test <- c(model[[4]][[4]],
+              model_log_r_test[[4]],
+              model_log_s_r_test[[4]],
+              model_lm_final_r_test[[4]])
 
 mse_train_log <- c(0, 
                    model_log_r_train[[2]], 
@@ -295,7 +302,16 @@ mse_train <- c(0,
                model_log_s_r_train[[5]], 
                model_lm_final_r_train[[5]])
 
-mse_test
+mse_test_log <- c(0, 
+                  model_log_r_test[[2]], 
+                  model_log_s_r_test[[2]], 
+                  model_lm_final_r_test[[2]])
+
+mse_test <- c(0, 
+              model_log_r_test[[5]], 
+              model_log_s_r_test[[5]], 
+              model_lm_final_r_test[[5]])
+
 
 rmse_train_log <- c(0, 
                     model_log_r_train[[3]], 
@@ -307,15 +323,29 @@ rmse_train <- c(model[[4]][[2]],
                 model_log_s_r_train[[6]], 
                 model_lm_final_r_train[[6]])
 
-rmse_test
-rsquared_train <- c(model[[4]][[3]], 
-                    0, 
-                    0, 
-                    0)
+rmse_test_log <- c(0, 
+                   model_log_r_test[[3]], 
+                   model_log_s_r_test[[3]], 
+                   model_lm_final_r_test[[3]])
 
+rmse_test <- c(model[[4]][[2]], 
+               model_log_r_test[[6]], 
+               model_log_s_r_test[[6]], 
+               model_lm_final_r_test[[6]])
 
+rsquared_model_train <- c(model[[4]][[3]], 
+                          model_log[[4]][[3]], 
+                          model_log_s[[4]][[3]], 
+                          model_lm_final[[4]][[3]])
 
 #then create df to compare evaluation
 
-
+sum_eva <- data.frame(model_name,
+                 mae_train_log, mae_train, 
+                 mae_test_log, mae_test, 
+                 mse_train_log, mse_train, 
+                 mse_test_log, mse_test,
+                 rmse_train_log, rmse_train, 
+                 rmse_test_log, rmse_test,
+                 rsquared_model_train)
 
