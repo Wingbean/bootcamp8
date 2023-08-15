@@ -1,0 +1,213 @@
+---
+title: "HW DataViz BootCamp8"
+author: "DataSloth"
+date: "2023-07-04"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(ggthemes)
+library(patchwork)
+library(tinytex)
+```
+
+# THE BEST Diamonds(in all dimension) is THE HIGHEST PRICE ?
+
+### This question start with this R Code
+
+```{r}
+diamonds %>%
+  arrange(-price) %>%
+  head(10)
+```
+
+Look at the result,18823 USD is the highest price but the highest price is not the best diamonds (perfect in all dimension: carat,cut,color,clarity)
+
+------------------------------------------------------------------------
+
+# So we find the perfect (best) dimonds in all dimension ?
+
+```{r}
+diamonds %>%
+  filter(color == "J" , clarity == "IF", cut == "Ideal") %>%
+  arrange(-price) %>%
+  head(10)
+```
+
+In diamonds dataset, we can find the best diamond but they aren't the highest-price diamonds.
+
+------------------------------------------------------------------------
+
+## Can we find the relation of the dimension ?
+
+-----------------------------------------------------------------------
+
+## 1.The Distribution of Diamonds Carat
+
+```{r}
+  ggplot(diamonds, aes(carat)) +
+  geom_boxplot(outlier.colour = "red",
+               outlier.alpha = 0.4) +
+  coord_flip() +
+  labs(
+    title = "Distribution of Carat in Diamonds",
+    caption = "Source: diamonds Dataset in R Studio"
+  )
+```
+
+The most diamonds carat is about 0.5 - 1 carat, the outlier is more than about 2 carat. The biggest is about 5 carat.
+
+------------------------------------------------------------------------
+
+### The relation of Carat - Price [Sample 50%].
+
+```{r}
+set.seed(57)
+diamonds_d <- sample_frac(diamonds,0.5)
+
+ggplot(diamonds_d, aes(carat,price)) +
+  geom_point(size = 4, col = "#474234", alpha = 0.6) +
+  geom_smooth(col = "red" , fill = "gold") +
+  theme_minimal() +
+  labs(
+    title = "The Relation of Diamonds Carat and Price",
+    caption = "Source: diamonds Dataset in R Studio"
+  )
+
+ggplot(diamonds_d, aes(carat,price)) +
+  geom_violin() +
+  theme_solarized() +
+  labs(
+    title = "Distribution of Diamonds Carat and Price",
+    caption = "Source: diamonds Dataset in R Studio"
+  )
+
+```
+
+Surprise!! The big carat(upto about 2.25 carat) make high price but more than about 2.25 carat to 3.25 carat, the bigger carat don't make the greater price.
+
+The good price is about 2.0-3.0 carat, we will look for it in the market.
+
+### To confirm, we show the relation about Carat and Price per carat.
+
+```{r}
+set.seed(57)
+diamonds %>%
+  mutate(price_per_carat = price/carat) %>%
+  sample_frac(0.5) %>%
+  ggplot(aes(carat,price_per_carat)) +
+  geom_point(size = 4, col = "#474234", alpha = 0.6) +
+  geom_smooth(col = "red" , fill = "gold") +
+  theme_minimal() +
+  labs(
+    title = "The Relation of Diamonds Carat and Price per carat",
+    caption = "Source: diamonds Dataset in R Studio"
+  )
+```
+
+
+Yes!! The good price per carat is about less than 2.0 Carat more than that, the price per carat is decrease.
+
+## 2. The Relation of Carat and Cut
+
+```{r}
+ggplot(diamonds_d, aes(cut,carat)) +
+  geom_violin(fill = "grey", color = "red") +
+  theme_solarized() +
+  labs(
+    title = "The Relation of Diamonds Carat and Cut",
+    x = "Cut of Diamonds",
+    y = "Diamonds Carat",
+    caption = "Source: diamonds Dataset in R Studio"
+  ) 
+```
+
+
+From this chart, The very big carat is just fair cut. If you want to find very Good cut or better, you should find in the small to medium carat (smaller than 2 carat). If You want big carat and concern about quality of cut, you should find in Very Good to Premium cut.
+
+### The Relation of Cut and Price
+
+
+```{r}
+ggplot(diamonds_d, aes(cut,price)) +
+  geom_boxplot(outlier.colour = "red",
+               outlier.alpha = 0.1) +
+  theme_solarized()
+```
+
+From this chart, the median price of premium cut is highest. The price of Fair Cut and Good cut is not more distribution and outlier. If you want stable price, you should find fair and good cut. If you can take risk of price but get higher price, you should find Very Good cut. If you are awesome diamonds seller, you should find Premium cut (high risk, high return).
+
+### The Relation of Diamonds Carat, Price per carat, Cut.
+
+```{r}
+set.seed(57)
+diamonds %>%
+  mutate(price_per_carat = price/carat) %>%
+  sample_frac(0.5) %>%
+  ggplot(aes(carat,price_per_carat, colour = cut )) +
+  geom_point(size = 3, alpha = 0.4) +
+  geom_smooth(col = "red") +
+  theme_minimal() +
+  labs(
+    title = "The Relation of Diamonds Carat, Price per carat, Cut [Sample 50%]",
+    caption = "Source: diamonds Dataset in R Studio"
+  )
+```
+
+From this chart, The good(high) price is about 1-2 carat in the Very Good to Ideal Cut. You don't find the bigger than 2 carat diamonds, you should find Ideal and Premium cut for the reasonable Price.
+
+### The Relation of Diamonds Carat, Price per carat, Cut [Sample 50%] -- Group Wrap by Clarity.
+
+
+```{r}
+diamonds %>%
+  mutate(price_per_carat = price/carat) %>%
+  sample_frac(0.5) %>%
+  ggplot(aes(carat,price_per_carat, colour = cut )) +
+  geom_point(size = 3, alpha = 0.4) +
+  geom_smooth(col = "red") +
+  theme_economist_white() +
+  facet_wrap(~clarity, ncol = 2) +
+  labs(
+    title = "The Relation of Diamonds Carat, Price per carat, Cut",
+    subtitle = "Group Wrap by Clarity [Sample 50%]",
+    caption = "Source: diamonds Dataset in R Studio"
+  )
+```
+
+
+From chart above, we can see about the relation of price with others dimensions clearly. But I'm not sure, so use whole data set and whole price not price_per_carat.
+
+
+```{r}
+ggplot(diamonds, aes(carat,price, colour = cut )) +
+  geom_point(size = 3, alpha = 0.4) +
+  geom_smooth(col = "red") +
+  theme_economist_white() +
+  facet_wrap(~clarity, ncol = 2) +
+  labs(
+    title = "The Relation of Diamonds Carat, Price, Cut",
+    subtitle = "Group Wrap by Clarity",
+    caption = "Source: diamonds Dataset in R Studio"
+  )
+```
+
+
+
+The different between sample 50% and whole data is Clarity I1. For sample 50%, Clarity I1, Trendline is platue that means the bigger carat diamonds is not higher price. For whole data, The result chart at I1 is not same way. It shows the bigger carat diamonds is higher price.
+
+
+We can see the distribution of color(cut) in the chart. The high level Cut (Premium , Ideal) most see in the high clarity. That make the higher price.
+
+# Conclusion
+
+If you are the diamond seller or buyer in this dataset, easy and safe way to choose the diamond You should look for 1.5-2.5 carat, Premium or Ideal Cut, VS2 VS1 VVS2 VVS1 IF Clarity. If you want big(carat) diamond, you should look for Fair to Very Good Cut and I1 Clarity.
+
