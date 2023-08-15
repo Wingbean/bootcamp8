@@ -176,6 +176,19 @@ train_data_log <- prep_data_log[[1]]
 test_data_log <- prep_data_log[[2]]
 ```
 
+### Visualized data(df1_log) ~ log_price
+```{r echo=TRUE}
+ggplot(df1_log, aes(log_price)) +
+  geom_histogram(bins = 100, fill="green") +
+  theme_minimal() +
+  labs(
+    title = "Visualized logarithm price by histogram",
+    subtitle = "Turn to normal distribution",
+    x = "Logaruthm price",
+    caption = "Source: data.world"
+  )
+```
+
 ### 2.2 Train model df1_log and log_price
 
 ### 2.2.1 Train
@@ -221,7 +234,7 @@ print("variable importance of --> model_log")
 print(varImp(model_log))
 ```
 
-
+## Select 
 
 
 
