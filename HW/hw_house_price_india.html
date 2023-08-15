@@ -621,7 +621,7 @@ model_log &lt;- train(log_price ~ .,
 <pre class="r"><code>p_log_train &lt;- predict(model_log, newdata = train_data_log)</code></pre>
 </div>
 <div id="calculate-train-error-from-model_log-with-logarithm-price-and-real-price_explog" class="section level3">
-<h3>2.2.2.2 calculate train error from “model_log” with logarithm price
+<h3>2.2.2.2 calculate train error from model_log with logarithm price
 and real price_exp(log)</h3>
 <pre class="r"><code>model_log_r_train &lt;- r_train(train_data_log, p_log_train, model_log)</code></pre>
 <pre><code>## [1] &quot;--Evaulation of TRAIN--&quot;
@@ -636,11 +636,11 @@ and real price_exp(log)</h3>
 ## [1] &quot;RMSE_model :  0.245141773832881&quot;</code></pre>
 </div>
 <div id="scorepredict-modelmodel_log" class="section level3">
-<h3>2.3 score~predict model(“model_log”)</h3>
+<h3>2.3 score~predict model(model_log)</h3>
 <pre class="r"><code>p_log_test &lt;- predict(model_log, newdata = test_data_log)</code></pre>
 </div>
 <div id="evaluate-modelmodel_log" class="section level3">
-<h3>2.4 Evaluate model(“model_log”)</h3>
+<h3>2.4 Evaluate model(model_log)</h3>
 <pre class="r"><code>model_log_r_test &lt;- r_test(test_data_log, p_log_test, model_log)</code></pre>
 <pre><code>## [1] &quot;--Evaulation of TEST--&quot;
 ## [1] &quot;MAE_log_test :  0.193446178197938&quot;
@@ -654,10 +654,12 @@ and real price_exp(log)</h3>
 ## [1] &quot;RMSE_model :  0.245141773832881&quot;</code></pre>
 </div>
 </div>
-<div id="after-train-model-use-real-price-vs-logarithm-price-now-find-out-the-important-variable-for-tuning-the-new-modelmodel_log_s-for-lower-error-or-high-accuracy" class="section level2">
-<h2>After train model use real price vs logarithm price, now find out
-the important variable for tuning the new model(“model_log_s”) for lower
-error or high accuracy</h2>
+<div id="after-train-model-use-real-price-vs-logarithm-price" class="section level2">
+<h2>After train model use real price vs logarithm price</h2>
+</div>
+<div id="find-out-the-important-variable-for-tuning-the-new-modelmodel_log_s-for-lower-error-or-high-accuracy" class="section level2">
+<h2>find out the important variable for tuning the new
+model(model_log_s) for lower error or high accuracy</h2>
 <pre><code>## [1] &quot;variable importance of --&gt; model&quot;</code></pre>
 <pre><code>## lm variable importance
 ## 
