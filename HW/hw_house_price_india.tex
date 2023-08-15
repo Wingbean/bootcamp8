@@ -1,0 +1,635 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={hw\_house\_price\_india},
+  pdfauthor={DataSloth},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{hw\_house\_price\_india}
+\author{DataSloth}
+\date{2023-08-15}
+
+\begin{document}
+\maketitle
+
+\hypertarget{this-project-will-predict-the-price-of-indian-house-using-linear-regression-by-r-programming}{%
+\section{This project will predict the price of Indian house using
+linear regression by R
+Programming}\label{this-project-will-predict-the-price-of-indian-house-using-linear-regression-by-r-programming}}
+
+Source : data.world\\
+type of source: xlsx
+
+\hypertarget{start-with-load-library}{%
+\subsection{Start with load library}\label{start-with-load-library}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#load library}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(caret)}
+\FunctionTok{library}\NormalTok{(mlbench)}
+\FunctionTok{library}\NormalTok{(readxl)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{load-data-file-to-dataframedf1-sheet1-df2-sheet2}{%
+\subsection{Load data file to dataframe(``df1 = sheet1, df2 =
+sheet2'')}\label{load-data-file-to-dataframedf1-sheet1-df2-sheet2}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load data}
+\NormalTok{df1}\OtherTok{\textless{}{-}}\FunctionTok{read\_excel}\NormalTok{(}\StringTok{"hpi.xlsx"}\NormalTok{, }\AttributeTok{sheet =} \DecValTok{1}\NormalTok{)}
+\NormalTok{df2}\OtherTok{\textless{}{-}}\FunctionTok{read\_excel}\NormalTok{(}\StringTok{"hpi.xlsx"}\NormalTok{, }\AttributeTok{sheet =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{visualized-datadf1-price}{%
+\subsection{Visualized data(df1) \textasciitilde{}
+Price}\label{visualized-datadf1-price}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df1, }\FunctionTok{aes}\NormalTok{(Price}\SpecialCharTok{/}\DecValTok{1000}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{bins =} \DecValTok{100}\NormalTok{, }\AttributeTok{fill=}\StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Visualized Real price by histogram"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Right skew"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Real price x1000"}\NormalTok{,}
+    \AttributeTok{caption =} \StringTok{"Source: data.world"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw_house_price_india_files/figure-latex/unnamed-chunk-3-1.pdf}
+Note: Right skew distribution, not proper for build model but try it.
+
+\hypertarget{create-function-split_data}{%
+\subsubsection{Create function
+split\_data}\label{create-function-split_data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{split\_data }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(df) \{}
+  \FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
+\NormalTok{  n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(df)}
+\NormalTok{  id }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n, }\AttributeTok{size =} \FloatTok{0.8}\SpecialCharTok{*}\NormalTok{n)}
+\NormalTok{  train\_df }\OtherTok{\textless{}{-}}\NormalTok{ df[id, ]}
+\NormalTok{  test\_df }\OtherTok{\textless{}{-}}\NormalTok{ df[}\SpecialCharTok{{-}}\NormalTok{id, ]}
+  \FunctionTok{list}\NormalTok{(train\_df, test\_df)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{use-full-data-and-real-price-to-build-model}{%
+\subsection{1.Use full data and real price to build
+model}\label{use-full-data-and-real-price-to-build-model}}
+
+\hypertarget{split-full-df1-and-real-price}{%
+\subsubsection{1.1 Split full df1 and real
+price}\label{split-full-df1-and-real-price}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prep\_data }\OtherTok{\textless{}{-}} \FunctionTok{split\_data}\NormalTok{(df1)}
+\NormalTok{train\_data }\OtherTok{\textless{}{-}}\NormalTok{ prep\_data[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{test\_data }\OtherTok{\textless{}{-}}\NormalTok{ prep\_data[[}\DecValTok{2}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{train-model-full-df1-and-real-price}{%
+\subsubsection{1.2 Train model full df1 and real
+price}\label{train-model-full-df1-and-real-price}}
+
+\hypertarget{train}{%
+\subsubsection{1.2.1 Train}\label{train}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model }\OtherTok{\textless{}{-}} \FunctionTok{train}\NormalTok{(Price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
+               \AttributeTok{data =}\NormalTok{ train\_data[ ,}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)], }\CommentTok{\#remove id and date}
+               \AttributeTok{method =} \StringTok{"lm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{show-model-and-summary-model}{%
+\subsubsection{1.2.2 Show model and summary
+model}\label{show-model-and-summary-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model ; }\FunctionTok{summary}\NormalTok{(model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear Regression 
+## 
+## 11696 samples
+##    20 predictor
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 11696, 11696, 11696, 11696, 11696, 11696, ... 
+## Resampling results:
+## 
+##   RMSE      Rsquared  MAE     
+##   192549.8  0.711037  123219.8
+## 
+## Tuning parameter 'intercept' was held constant at a value of TRUE
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = .outcome ~ ., data = dat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1111112   -96339    -8097    75756  3896879 
+## 
+## Coefficients: (1 not defined because of singularities)
+##                                                 Estimate Std. Error t value
+## (Intercept)                                   -6.807e+07  1.241e+07  -5.485
+## `\\`number of bedrooms\\``                    -3.545e+04  2.577e+03 -13.759
+## `\\`number of bathrooms\\``                    4.235e+04  4.250e+03   9.966
+## `\\`living area\\``                            1.409e+02  5.716e+00  24.652
+## `\\`lot area\\``                              -5.479e-03  6.445e-02  -0.085
+## `\\`number of floors\\``                       6.220e+03  4.677e+03   1.330
+## `\\`waterfront present\\``                     6.331e+05  2.217e+04  28.558
+## `\\`number of views\\``                        4.595e+04  2.800e+03  16.408
+## `\\`condition of the house\\``                 3.138e+04  2.994e+03  10.479
+## `\\`grade of the house\\``                     1.003e+05  2.814e+03  35.648
+## `\\`Area of the house(excluding basement)\\``  3.560e+01  5.671e+00   6.278
+## `\\`Area of the basement\\``                          NA         NA      NA
+## `\\`Built Year\\``                            -2.509e+03  9.334e+01 -26.879
+## `\\`Renovation Year\\``                        2.295e+01  4.574e+00   5.016
+## `\\`Postal Code\\``                            2.610e+02  1.006e+02   2.596
+## Lattitude                                      5.509e+05  1.429e+04  38.557
+## Longitude                                     -9.900e+04  1.566e+04  -6.323
+## living_area_renov                              2.529e+01  4.512e+00   5.606
+## lot_area_renov                                -3.178e-01  9.726e-02  -3.268
+## `\\`Number of schools nearby\\``               3.513e+03  2.178e+03   1.613
+## `\\`Distance from the airport\\``              1.344e+01  1.993e+02   0.067
+##                                               Pr(>|t|)    
+## (Intercept)                                   4.22e-08 ***
+## `\\`number of bedrooms\\``                     < 2e-16 ***
+## `\\`number of bathrooms\\``                    < 2e-16 ***
+## `\\`living area\\``                            < 2e-16 ***
+## `\\`lot area\\``                               0.93226    
+## `\\`number of floors\\``                       0.18359    
+## `\\`waterfront present\\``                     < 2e-16 ***
+## `\\`number of views\\``                        < 2e-16 ***
+## `\\`condition of the house\\``                 < 2e-16 ***
+## `\\`grade of the house\\``                     < 2e-16 ***
+## `\\`Area of the house(excluding basement)\\`` 3.56e-10 ***
+## `\\`Area of the basement\\``                        NA    
+## `\\`Built Year\\``                             < 2e-16 ***
+## `\\`Renovation Year\\``                       5.34e-07 ***
+## `\\`Postal Code\\``                            0.00946 ** 
+## Lattitude                                      < 2e-16 ***
+## Longitude                                     2.67e-10 ***
+## living_area_renov                             2.12e-08 ***
+## lot_area_renov                                 0.00109 ** 
+## `\\`Number of schools nearby\\``               0.10684    
+## `\\`Distance from the airport\\``              0.94624    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 192300 on 11676 degrees of freedom
+## Multiple R-squared:  0.7136, Adjusted R-squared:  0.7131 
+## F-statistic:  1531 on 19 and 11676 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\hypertarget{scorepredict-model}{%
+\subsubsection{1.3 score\textasciitilde predict
+model}\label{scorepredict-model}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(model, }\AttributeTok{newdata =}\NormalTok{ test\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{evaluate-model}{%
+\subsubsection{1.4 Evaluate model}\label{evaluate-model}}
+
+\hypertarget{create-function-to-calculate-mae-mse-rmse}{%
+\paragraph{Create function to calculate MAE, MSE,
+RMSE}\label{create-function-to-calculate-mae-mse-rmse}}
+
+\hypertarget{create-function-to-show-error-of-model-and-save-result-to-list-note-error-in-real-price-and-logarithm-price}{%
+\paragraph{Create function to show error of model and save result to
+list, note: error in real price and logarithm
+price}\label{create-function-to-show-error-of-model-and-save-result-to-list-note-error-in-real-price-and-logarithm-price}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cal\_mae }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(actual, predict) \{}
+\NormalTok{  error }\OtherTok{\textless{}{-}}\NormalTok{ actual }\SpecialCharTok{{-}}\NormalTok{ predict}
+  \FunctionTok{mean}\NormalTok{(}\FunctionTok{abs}\NormalTok{(error))}
+\NormalTok{\}}
+
+\NormalTok{cal\_mse }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(actual, predict) \{}
+\NormalTok{  error }\OtherTok{\textless{}{-}}\NormalTok{ actual }\SpecialCharTok{{-}}\NormalTok{ predict}
+  \FunctionTok{mean}\NormalTok{(error}\SpecialCharTok{**}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+
+\NormalTok{cal\_rmse }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(actual, predict) \{}
+\NormalTok{  error }\OtherTok{\textless{}{-}}\NormalTok{ actual }\SpecialCharTok{{-}}\NormalTok{ predict}
+  \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{(error}\SpecialCharTok{**}\DecValTok{2}\NormalTok{))}
+\NormalTok{\}}
+
+\NormalTok{r\_train }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(A,P,}\AttributeTok{M =}\NormalTok{ model) \{}
+\NormalTok{  mae\_log }\OtherTok{\textless{}{-}} \FunctionTok{cal\_mae}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price, P)}
+\NormalTok{  mse\_log }\OtherTok{\textless{}{-}} \FunctionTok{cal\_mse}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price, P)}
+\NormalTok{  rmse\_log }\OtherTok{\textless{}{-}} \FunctionTok{cal\_rmse}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price, P)}
+\NormalTok{  mae\_expo }\OtherTok{\textless{}{-}} \FunctionTok{cal\_mae}\NormalTok{(}\FunctionTok{exp}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price), }\FunctionTok{exp}\NormalTok{(P))}
+\NormalTok{  mse\_expo }\OtherTok{\textless{}{-}} \FunctionTok{cal\_mse}\NormalTok{(}\FunctionTok{exp}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price), }\FunctionTok{exp}\NormalTok{(P))}
+\NormalTok{  rmse\_expo }\OtherTok{\textless{}{-}} \FunctionTok{cal\_rmse}\NormalTok{(}\FunctionTok{exp}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price), }\FunctionTok{exp}\NormalTok{(P))}
+  \FunctionTok{print}\NormalTok{(}\StringTok{"{-}{-}Evaulation of TRAIN{-}{-}"}\NormalTok{);}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MAE\_log\_train : "}\NormalTok{,mae\_log)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MSE\_log\_train : "}\NormalTok{,mse\_log)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"RMSE\_log\_train : "}\NormalTok{,rmse\_log)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MAE\_expo\_train : "}\NormalTok{,mae\_expo)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MSE\_expo\_train : "}\NormalTok{,mse\_expo)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"RMSE\_expo\_train : "}\NormalTok{,rmse\_expo)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MAE\_model : "}\NormalTok{  ,      M[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{4}\NormalTok{]])) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Rsquared\_model : "}\NormalTok{  , M[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{3}\NormalTok{]])) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"RMSE\_model : "}\NormalTok{ ,      M[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{2}\NormalTok{]])) ;}
+  \FunctionTok{list}\NormalTok{(mae\_log, mse\_log, rmse\_log, mae\_expo, mse\_expo, rmse\_expo)}
+\NormalTok{\}}
+
+\NormalTok{r\_test }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(A,P,}\AttributeTok{M =}\NormalTok{ model) \{}
+\NormalTok{  mae\_log }\OtherTok{\textless{}{-}} \FunctionTok{cal\_mae}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price, P)}
+\NormalTok{  mse\_log }\OtherTok{\textless{}{-}} \FunctionTok{cal\_mse}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price, P)}
+\NormalTok{  rmse\_log }\OtherTok{\textless{}{-}} \FunctionTok{cal\_rmse}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price, P)}
+\NormalTok{  mae\_expo }\OtherTok{\textless{}{-}} \FunctionTok{cal\_mae}\NormalTok{(}\FunctionTok{exp}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price), }\FunctionTok{exp}\NormalTok{(P))}
+\NormalTok{  mse\_expo }\OtherTok{\textless{}{-}} \FunctionTok{cal\_mse}\NormalTok{(}\FunctionTok{exp}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price), }\FunctionTok{exp}\NormalTok{(P))}
+\NormalTok{  rmse\_expo }\OtherTok{\textless{}{-}} \FunctionTok{cal\_rmse}\NormalTok{(}\FunctionTok{exp}\NormalTok{(A}\SpecialCharTok{$}\NormalTok{log\_price), }\FunctionTok{exp}\NormalTok{(P))}
+  \FunctionTok{print}\NormalTok{(}\StringTok{"{-}{-}Evaulation of TEST{-}{-}"}\NormalTok{);}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MAE\_log\_test : "}\NormalTok{,mae\_log)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MSE\_log\_test : "}\NormalTok{,mse\_log)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"RMSE\_log\_test : "}\NormalTok{,rmse\_log)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MAE\_expo\_test : "}\NormalTok{,mae\_expo)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MSE\_expo\_test : "}\NormalTok{,mse\_expo)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"RMSE\_expo\_test : "}\NormalTok{,rmse\_expo)) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MAE\_model : "}\NormalTok{  ,      M[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{4}\NormalTok{]])) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Rsquared\_model : "}\NormalTok{  , M[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{3}\NormalTok{]])) ;}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"RMSE\_model : "}\NormalTok{ ,      M[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{2}\NormalTok{]])) ;}
+  \FunctionTok{list}\NormalTok{(mae\_log, mse\_log, rmse\_log, mae\_expo, mse\_expo, rmse\_expo)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{show-error-of-model-full-df1-and-real-price}{%
+\subsubsection{1.5 Show error of model full df1 and real
+price}\label{show-error-of-model-full-df1-and-real-price}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MAE\_test : "}\NormalTok{  , }\FunctionTok{cal\_mae}\NormalTok{(test\_data}\SpecialCharTok{$}\NormalTok{Price, p)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "MAE_test :  128122.818842742"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MSE\_test : "}\NormalTok{  , }\FunctionTok{cal\_mse}\NormalTok{(test\_data}\SpecialCharTok{$}\NormalTok{Price, p)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "MSE_test :  53518979494.8183"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"RMSE\_test : "}\NormalTok{ , }\FunctionTok{cal\_rmse}\NormalTok{(test\_data}\SpecialCharTok{$}\NormalTok{Price, p)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "RMSE_test :  231341.694242128"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"MAE\_model : "}\NormalTok{  ,      model[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{4}\NormalTok{]]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "MAE_model :  123219.80420048"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Rsquared\_model : "}\NormalTok{  , model[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{3}\NormalTok{]]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Rsquared_model :  0.711036950308182"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"RMSE\_model : "}\NormalTok{ ,      model[[}\DecValTok{4}\NormalTok{]][[}\DecValTok{2}\NormalTok{]]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "RMSE_model :  192549.824849158"
+\end{verbatim}
+
+\hypertarget{the-modelfull-data-real-price-high-error-compare-train-and-test-rsquared_model-0.711036950308182}{%
+\subparagraph{The model(full data, real price) : high error compare
+train and test, Rsquared\_model :
+0.711036950308182}\label{the-modelfull-data-real-price-high-error-compare-train-and-test-rsquared_model-0.711036950308182}}
+
+\hypertarget{so-correct-the-right-skew-distribution-by-take-logarithm-pricelog_price}{%
+\subsection{So correct the Right skew distribution by take logarithm
+price(log\_price)}\label{so-correct-the-right-skew-distribution-by-take-logarithm-pricelog_price}}
+
+\hypertarget{use-full-data-and-logarithm-price-to-build-model}{%
+\subsection{2. Use full data and logarithm price to build
+model}\label{use-full-data-and-logarithm-price-to-build-model}}
+
+\hypertarget{create-log_price-and-split-full-df1-with-log_price-to-df1_log}{%
+\subsubsection{2.1 Create log\_price and Split full df1 with log\_price
+to
+df1\_log}\label{create-log_price-and-split-full-df1-with-log_price-to-df1_log}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df1\_log }\OtherTok{\textless{}{-}}\NormalTok{ df1 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{log\_price =} \FunctionTok{log}\NormalTok{(Price))}
+
+\CommentTok{\# Split full df1\_log}
+
+\NormalTok{prep\_data\_log }\OtherTok{\textless{}{-}} \FunctionTok{split\_data}\NormalTok{(df1\_log)}
+\NormalTok{train\_data\_log }\OtherTok{\textless{}{-}}\NormalTok{ prep\_data\_log[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{test\_data\_log }\OtherTok{\textless{}{-}}\NormalTok{ prep\_data\_log[[}\DecValTok{2}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{train-model-df1_log-and-log_price}{%
+\subsubsection{2.2 Train model df1\_log and
+log\_price}\label{train-model-df1_log-and-log_price}}
+
+\hypertarget{train-1}{%
+\subsubsection{2.2.1 Train}\label{train-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
+\NormalTok{model\_log }\OtherTok{\textless{}{-}} \FunctionTok{train}\NormalTok{(log\_price }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
+               \AttributeTok{data =}\NormalTok{ train\_data\_log[ , }\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{23}\NormalTok{)], }\CommentTok{\#remove price,id,date}
+               \AttributeTok{method =} \StringTok{"lm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{calculate-train-error}{%
+\subsubsection{2.2.2 calculate train
+error}\label{calculate-train-error}}
+
+\hypertarget{predict-train-model_log}{%
+\subsubsection{2.2.2.1 predict train
+model\_log}\label{predict-train-model_log}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p\_log\_train }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(model\_log, }\AttributeTok{newdata =}\NormalTok{ train\_data\_log)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{calculate-train-error-from-model_log-with-logarithm-price-and-real-price_explog}{%
+\subsubsection{2.2.2.2 calculate train error from ``model\_log'' with
+logarithm price and real
+price\_exp(log)}\label{calculate-train-error-from-model_log-with-logarithm-price-and-real-price_explog}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_log\_r\_train }\OtherTok{\textless{}{-}} \FunctionTok{r\_train}\NormalTok{(train\_data\_log, p\_log\_train, model\_log)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "--Evaulation of TRAIN--"
+## [1] "MAE_log_train :  0.186876611630186"
+## [1] "MSE_log_train :  0.0592234337771878"
+## [1] "RMSE_log_train :  0.243358652562813"
+## [1] "MAE_expo_train :  106108.300922603"
+## [1] "MSE_expo_train :  32179140733.112"
+## [1] "RMSE_expo_train :  179385.45295846"
+## [1] "MAE_model :  0.188182348161632"
+## [1] "Rsquared_model :  0.783296783181617"
+## [1] "RMSE_model :  0.245141773832881"
+\end{verbatim}
+
+\hypertarget{scorepredict-modelmodel_log}{%
+\subsubsection{2.3 score\textasciitilde predict
+model(``model\_log'')}\label{scorepredict-modelmodel_log}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p\_log\_test }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(model\_log, }\AttributeTok{newdata =}\NormalTok{ test\_data\_log)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{evaluate-modelmodel_log}{%
+\subsubsection{2.4 Evaluate
+model(``model\_log'')}\label{evaluate-modelmodel_log}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_log\_r\_test }\OtherTok{\textless{}{-}} \FunctionTok{r\_test}\NormalTok{(test\_data\_log, p\_log\_test, model\_log)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "--Evaulation of TEST--"
+## [1] "MAE_log_test :  0.193446178197938"
+## [1] "MSE_log_test :  0.0648345743548279"
+## [1] "RMSE_log_test :  0.254626342617624"
+## [1] "MAE_expo_test :  119667.914904593"
+## [1] "MSE_expo_test :  125501870360.535"
+## [1] "RMSE_expo_test :  354262.431483406"
+## [1] "MAE_model :  0.188182348161632"
+## [1] "Rsquared_model :  0.783296783181617"
+## [1] "RMSE_model :  0.245141773832881"
+\end{verbatim}
+
+\hypertarget{after-train-model-use-real-price-vs-logarithm-price-now-find-out-the-important-variable-for-tuning-the-new-modelmodel_log_s-for-lower-error-or-high-accuracy}{%
+\subsection{After train model use real price vs logarithm price, now
+find out the important variable for tuning the new
+model(``model\_log\_s'') for lower error or high
+accuracy}\label{after-train-model-use-real-price-vs-logarithm-price-now-find-out-the-important-variable-for-tuning-the-new-modelmodel_log_s-for-lower-error-or-high-accuracy}}
+
+\begin{verbatim}
+## [1] "variable importance of --> model"
+\end{verbatim}
+
+\begin{verbatim}
+## lm variable importance
+## 
+##                                                 Overall
+## Lattitude                                     100.00000
+## `\\`grade of the house\\``                     92.44341
+## `\\`waterfront present\\``                     74.02204
+## `\\`Built Year\\``                             69.66113
+## `\\`living area\\``                            63.87331
+## `\\`number of views\\``                        42.45423
+## `\\`number of bedrooms\\``                     35.57289
+## `\\`condition of the house\\``                 27.05106
+## `\\`number of bathrooms\\``                    25.71746
+## Longitude                                      16.25183
+## `\\`Area of the house(excluding basement)\\``  16.13526
+## living_area_renov                              14.38876
+## `\\`Renovation Year\\``                        12.85816
+## lot_area_renov                                  8.31543
+## `\\`Postal Code\\``                             6.56831
+## `\\`Number of schools nearby\\``                4.01476
+## `\\`number of floors\\``                        3.27998
+## `\\`lot area\\``                                0.04566
+## `\\`Distance from the airport\\``               0.00000
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "variable importance of --> model_log"
+\end{verbatim}
+
+\begin{verbatim}
+## lm variable importance
+## 
+##                                                 Overall
+## Lattitude                                     100.00000
+## `\\`grade of the house\\``                     63.49513
+## `\\`Built Year\\``                             39.30658
+## `\\`living area\\``                            30.85679
+## `\\`condition of the house\\``                 25.85637
+## living_area_renov                              24.40844
+## `\\`number of views\\``                        23.01281
+## `\\`waterfront present\\``                     19.73784
+## `\\`number of bathrooms\\``                    18.30983
+## `\\`Postal Code\\``                            18.06680
+## `\\`number of floors\\``                       16.05220
+## `\\`Renovation Year\\``                        12.04673
+## `\\`lot area\\``                                7.21650
+## `\\`number of bedrooms\\``                      6.90855
+## Longitude                                       4.33343
+## `\\`Area of the house(excluding basement)\\``   1.72684
+## lot_area_renov                                  1.61028
+## `\\`Distance from the airport\\``               0.05296
+## `\\`Number of schools nearby\\``                0.00000
+\end{verbatim}
+
+\end{document}

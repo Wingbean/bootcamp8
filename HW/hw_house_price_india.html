@@ -585,6 +585,104 @@ test, Rsquared_model : 0.711036950308182</h5>
 </div>
 </div>
 </div>
+<div id="so-correct-the-right-skew-distribution-by-take-logarithm-pricelog_price" class="section level2">
+<h2>So correct the Right skew distribution by take logarithm
+price(log_price)</h2>
+</div>
+<div id="use-full-data-and-logarithm-price-to-build-model" class="section level2">
+<h2>2. Use full data and logarithm price to build model</h2>
+<div id="create-log_price-and-split-full-df1-with-log_price-to-df1_log" class="section level3">
+<h3>2.1 Create log_price and Split full df1 with log_price to
+df1_log</h3>
+<pre class="r"><code>df1_log &lt;- df1 %&gt;%
+  mutate(log_price = log(Price))
+
+# Split full df1_log
+
+prep_data_log &lt;- split_data(df1_log)
+train_data_log &lt;- prep_data_log[[1]]
+test_data_log &lt;- prep_data_log[[2]]</code></pre>
+</div>
+<div id="train-model-df1_log-and-log_price" class="section level3">
+<h3>2.2 Train model df1_log and log_price</h3>
+</div>
+<div id="train-1" class="section level3">
+<h3>2.2.1 Train</h3>
+<pre class="r"><code>set.seed(42)
+model_log &lt;- train(log_price ~ .,
+               data = train_data_log[ , -c(1,2,23)], #remove price,id,date
+               method = &quot;lm&quot;)</code></pre>
+</div>
+<div id="calculate-train-error" class="section level3">
+<h3>2.2.2 calculate train error</h3>
+</div>
+<div id="predict-train-model_log" class="section level3">
+<h3>2.2.2.1 predict train model_log</h3>
+<pre class="r"><code>p_log_train &lt;- predict(model_log, newdata = train_data_log)</code></pre>
+</div>
+<div id="calculate-train-error-from-model_log-with-logarithm-price-and-real-priceexplog" class="section level3">
+<h3>2.2.2.2 calculate train error from “model_log” with logarithm price
+and real price[exp(log)]</h3>
+<pre class="r"><code>model_log_r_train &lt;- r_train(train_data_log, p_log_train, model_log)</code></pre>
+<pre><code>## [1] &quot;--Evaulation of TRAIN--&quot;
+## [1] &quot;MAE_log_train :  0.186876611630186&quot;
+## [1] &quot;MSE_log_train :  0.0592234337771878&quot;
+## [1] &quot;RMSE_log_train :  0.243358652562813&quot;
+## [1] &quot;MAE_expo_train :  106108.300922603&quot;
+## [1] &quot;MSE_expo_train :  32179140733.112&quot;
+## [1] &quot;RMSE_expo_train :  179385.45295846&quot;
+## [1] &quot;MAE_model :  0.188182348161632&quot;
+## [1] &quot;Rsquared_model :  0.783296783181617&quot;
+## [1] &quot;RMSE_model :  0.245141773832881&quot;</code></pre>
+</div>
+<div id="scorepredict-modelmodel_log" class="section level3">
+<h3>2.3 score~predict model(“model_log”)</h3>
+<pre class="r"><code>p_log_test &lt;- predict(model_log, newdata = test_data_log)</code></pre>
+</div>
+<div id="evaluate-modelmodel_log" class="section level3">
+<h3>2.4 Evaluate model(“model_log”)</h3>
+<pre class="r"><code>model_log_r_test &lt;- r_test(test_data_log, p_log_test, model_log)</code></pre>
+<pre><code>## [1] &quot;--Evaulation of TEST--&quot;
+## [1] &quot;MAE_log_test :  0.193446178197938&quot;
+## [1] &quot;MSE_log_test :  0.0648345743548279&quot;
+## [1] &quot;RMSE_log_test :  0.254626342617624&quot;
+## [1] &quot;MAE_expo_test :  119667.914904593&quot;
+## [1] &quot;MSE_expo_test :  125501870360.535&quot;
+## [1] &quot;RMSE_expo_test :  354262.431483406&quot;
+## [1] &quot;MAE_model :  0.188182348161632&quot;
+## [1] &quot;Rsquared_model :  0.783296783181617&quot;
+## [1] &quot;RMSE_model :  0.245141773832881&quot;</code></pre>
+</div>
+</div>
+<div id="after-train-model-use-real-price-vs-logarithm-price-now-find-out-the-important-variable-for-tuning-the-new-modelmodel_log_s-for-lower-error-or-high-accuracy" class="section level2">
+<h2>After train model use real price vs logarithm price, now find out
+the important variable for tuning the new model(“model_log_s”) for lower
+error or high accuracy</h2>
+<pre class="r"><code>print(&quot;variable importance of model&quot;)</code></pre>
+<pre><code>## [1] &quot;variable importance of model&quot;</code></pre>
+<pre><code>## lm variable importance
+## 
+##                                                 Overall
+## Lattitude                                     100.00000
+## `\\`grade of the house\\``                     92.44341
+## `\\`waterfront present\\``                     74.02204
+## `\\`Built Year\\``                             69.66113
+## `\\`living area\\``                            63.87331
+## `\\`number of views\\``                        42.45423
+## `\\`number of bedrooms\\``                     35.57289
+## `\\`condition of the house\\``                 27.05106
+## `\\`number of bathrooms\\``                    25.71746
+## Longitude                                      16.25183
+## `\\`Area of the house(excluding basement)\\``  16.13526
+## living_area_renov                              14.38876
+## `\\`Renovation Year\\``                        12.85816
+## lot_area_renov                                  8.31543
+## `\\`Postal Code\\``                             6.56831
+## `\\`Number of schools nearby\\``                4.01476
+## `\\`number of floors\\``                        3.27998
+## `\\`lot area\\``                                0.04566
+## `\\`Distance from the airport\\``               0.00000</code></pre>
+</div>
 </div>
 
 

@@ -160,8 +160,61 @@ print(paste("RMSE_model : " ,      model[[4]][[2]]))
 ```
 ##### The model(full data, real price) : high error compare train and test, Rsquared_model :  0.711036950308182
 
+## So correct the Right skew distribution by take logarithm price(log_price)
+## 2. Use full data and logarithm price to build model
+### 2.1 Create log_price and Split full df1 with log_price to df1_log
+```{r}
+df1_log <- df1 %>%
+  mutate(log_price = log(Price))
 
+# Split full df1_log
 
+prep_data_log <- split_data(df1_log)
+train_data_log <- prep_data_log[[1]]
+test_data_log <- prep_data_log[[2]]
+```
+
+### 2.2 Train model df1_log and log_price
+### 2.2.1 Train
+```{r}
+set.seed(42)
+model_log <- train(log_price ~ .,
+               data = train_data_log[ , -c(1,2,23)], #remove price,id,date
+               method = "lm")
+```
+### 2.2.2 calculate train error
+### 2.2.2.1 predict train model_log
+```{r}
+p_log_train <- predict(model_log, newdata = train_data_log)
+```
+### 2.2.2.2 calculate train error from "model_log" with logarithm price and real price_exp(log)
+```{r}
+model_log_r_train <- r_train(train_data_log, p_log_train, model_log)
+```
+
+### 2.3 score~predict model("model_log")
+```{r}
+p_log_test <- predict(model_log, newdata = test_data_log)
+```
+### 2.4 Evaluate model("model_log")
+```{r}
+model_log_r_test <- r_test(test_data_log, p_log_test, model_log)
+```
+
+## After train model use real price vs logarithm price, now find out the important variable for tuning the new model("model_log_s") for lower error or high accuracy
+```{r echo=FALSE}
+print("variable importance of --> model")
+```
+```{r echo=FALSE}
+print(varImp(model))
+```
+
+```{r echo=FALSE}
+print("variable importance of --> model_log")
+```
+```{r echo=FALSE}
+print(varImp(model_log))
+```
 
 
 
