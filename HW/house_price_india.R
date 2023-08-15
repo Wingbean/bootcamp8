@@ -188,7 +188,6 @@ prep_data_s <- split_data(df1_s)
 train_data_s <- prep_data_s[[1]]
 test_data_s <- prep_data_s[[2]]
 
-set.seed(42)
 model_log_s <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
                    data = train_data_s,
                    method = "lm")
@@ -234,7 +233,6 @@ ctrl <- trainControl(
   verboseIter = TRUE
 )
 
-set.seed(42)
 model_lm_final <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
                      data = train_data_s,
                      method = "lm",
@@ -270,16 +268,6 @@ model_lm_final_r_test <- r_test(test_data_s, p_lm_final_test, model_lm_final)
 #paste("RMSE_expo_s_test : ", cal_rmse(exp(test_data_s$log_price), exp(p_log_s_test)))
 
 ##-----------------------------------------##
-##---------switch method to knn-------------##
-
-model_log_s <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
-                     data = train_data_s,
-                     method = "knn",
-                     tuneGrid = data.frame(k=c(5, 7, 13)),
-                     preProcess = c("center", "scale"),
-                     #preProcess = c("range", "zv", "nzv"),
-                     trControl = ctrl)
-
 ##----------Summary Evaluation-------------##
 
 #create vector model, model_log, model_log_s, model_lm_final
@@ -365,4 +353,113 @@ sum_eva <- data.frame(model_name,
                  rmse_train_log, rmse_train, 
                  rmse_test_log, rmse_test,
                  rsquared_model_train)
+
+##---------switch method to knn-------------##
+
+model_knn_final <- train(log_price ~ lat + grade + bld_yr + lv_area + no_view,
+                         data = train_data_s,
+                         method = "knn",
+                         tuneGrid = data.frame(k=c(5, 7, 13)),
+                         preProcess = c("center", "scale"),
+                         #preProcess = c("range", "zv", "nzv"),
+                         trControl = ctrl)
+
+p_knn_final_train <- predict(model_knn_final, newdata = train_data_s)
+
+## evaluate train model_knn_final
+
+model_knn_final_r_train <- r_train(train_data_s, p_knn_final_train, model_knn_final)
+
+# test model_knn_final
+p_knn_final_test <- predict(model_knn_final, newdata = test_data_s)
+
+# evaluate test model_knn_final
+
+model_knn_final_r_test <- r_test(test_data_s, p_knn_final_test, model_knn_final)
+
+#create vector model, model_log, model_log_s, model_lm_final, model_knn_final
+model_name <- c("model",
+                "model_log",
+                "model_log_s",
+                "model_lm_final",
+                "model_knn_final")
+
+#create vector MAE-train/test, MSE-train/test, RMSE-train/test, Rsquared train
+mae_train_log <- c(0,
+                   model_log_r_train[[1]],
+                   model_log_s_r_train[[1]],
+                   model_lm_final_r_train[[1]],
+                   model_knn_final_r_train[[1]])
+
+mae_train <- c(model[[4]][[4]],
+               model_log_r_train[[4]],
+               model_log_s_r_train[[4]],
+               model_lm_final_r_train[[4]],
+               model_knn_final_r_train[[4]])
+
+mae_test_log <- c(0,
+                  model_log_r_test[[1]],
+                  model_log_s_r_test[[1]],
+                  model_lm_final_r_test[[1]],
+                  model_knn_final_r_test[[1]])
+
+mae_test <- c(model[[4]][[4]],
+              model_log_r_test[[4]],
+              model_log_s_r_test[[4]],
+              model_lm_final_r_test[[4]],
+              model_knn_final_r_test[[4]])
+
+mse_train_log <- c(0, 
+                   model_log_r_train[[2]], 
+                   model_log_s_r_train[[2]], 
+                   model_lm_final_r_train[[2]],
+                   model_knn_final_r_train[[2]])
+
+mse_train <- c(0, 
+               model_log_r_train[[5]], 
+               model_log_s_r_train[[5]], 
+               model_lm_final_r_train[[5]],
+               model_knn_final_r_train[[5]])
+
+mse_test_log <- c(0, 
+                  model_log_r_test[[2]], 
+                  model_log_s_r_test[[2]], 
+                  model_lm_final_r_test[[2]],
+                  model_knn_final_r_test[[2]])
+
+mse_test <- c(0, 
+              model_log_r_test[[5]], 
+              model_log_s_r_test[[5]], 
+              model_lm_final_r_test[[5]],
+              model_knn_final_r_test[[5]])
+
+rmse_train_log <- c(0, 
+                    model_log_r_train[[3]], 
+                    model_log_s_r_train[[3]], 
+                    model_lm_final_r_train[[3]],
+                    model_knn_final_r_train[[3]])
+
+rmse_train <- c(model[[4]][[2]], 
+                model_log_r_train[[6]], 
+                model_log_s_r_train[[6]], 
+                model_lm_final_r_train[[6]],
+                model_knn_final_r_train[[6]])
+
+rmse_test_log <- c(0, 
+                   model_log_r_test[[3]], 
+                   model_log_s_r_test[[3]], 
+                   model_lm_final_r_test[[3]],
+                   model_knn_final_r_test[[3]])
+
+rmse_test <- c(model[[4]][[2]], 
+               model_log_r_test[[6]], 
+               model_log_s_r_test[[6]], 
+               model_lm_final_r_test[[6]],
+               model_knn_final_r_test[[6]])
+
+rsquared_model_train <- c(model[[4]][[3]], 
+                          model_log[[4]][[3]], 
+                          model_log_s[[4]][[3]], 
+                          model_lm_final[[4]][[3]],
+                          model_knn_final[[4]][[3,3]])
 
