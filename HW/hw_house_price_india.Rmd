@@ -2,10 +2,173 @@
 title: "hw_house_price_india"
 author: "DataSloth"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# This project will predict the price of Indian house using linear regression by R Programming
+
+Source : data.world \
+type of source: xlsx
+
+## Start with load library
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#load library
+library(tidyverse)
+library(caret)
+library(mlbench)
+library(readxl)
+library(ggplot2)
+```
+
+## Load data file to dataframe("df1 = sheet1, df2 = sheet2")
+
+```{r echo=TRUE}
+# Load data
+df1<-read_excel("hpi.xlsx", sheet = 1)
+df2<-read_excel("hpi.xlsx", sheet = 2)
+```
+
+## Visualized data(df1) ~ Price
+```{r echo=TRUE}
+ggplot(df1, aes(Price/1000)) +
+  geom_histogram(bins = 100, fill="blue") +
+  theme_minimal() +
+  labs(
+    title = "Visualized Real price by histogram",
+    subtitle = "Right skew",
+    x = "Real price x1000",
+    caption = "Source: data.world"
+  )
+```
+Note: Right skew distribution, not proper for build model but try it.
+
+### Create function split_data
+
+```{r echo=TRUE}
+split_data <- function(df) {
+  set.seed(42)
+  n <- nrow(df)
+  id <- sample(1:n, size = 0.8*n)
+  train_df <- df[id, ]
+  test_df <- df[-id, ]
+  list(train_df, test_df)
+}
+```
+
+## 1.Use full data and real price to build model
+
+### 1.1 Split full df1 and real price
+```{r echo=TRUE}
+prep_data <- split_data(df1)
+train_data <- prep_data[[1]]
+test_data <- prep_data[[2]]
+```
+
+### 1.2 Train model full df1 and real price
+### 1.2.1 Train
+```{r echo=TRUE}
+model <- train(Price ~ .,
+               data = train_data[ ,-c(1,2)], #remove id and date
+               method = "lm")
+```
+
+### 1.2.2 Show model and summary model
+```{r}
+model ; summary(model)
+```
+
+
+### 1.3 score~predict model
+```{r echo=TRUE}
+p <- predict(model, newdata = test_data)
+```
+
+### 1.4 Evaluate model
+#### Create function to calculate MAE, MSE, RMSE
+#### Create function to show error of model and save result to list, note: error in real price and logarithm price
+```{r echo=TRUE}
+cal_mae <- function(actual, predict) {
+  error <- actual - predict
+  mean(abs(error))
+}
+
+cal_mse <- function(actual, predict) {
+  error <- actual - predict
+  mean(error**2)
+}
+
+cal_rmse <- function(actual, predict) {
+  error <- actual - predict
+  sqrt(mean(error**2))
+}
+
+r_train <- function(A,P,M = model) {
+  mae_log <- cal_mae(A$log_price, P)
+  mse_log <- cal_mse(A$log_price, P)
+  rmse_log <- cal_rmse(A$log_price, P)
+  mae_expo <- cal_mae(exp(A$log_price), exp(P))
+  mse_expo <- cal_mse(exp(A$log_price), exp(P))
+  rmse_expo <- cal_rmse(exp(A$log_price), exp(P))
+  print("--Evaulation of TRAIN--");
+  print(paste("MAE_log_train : ",mae_log)) ;
+  print(paste("MSE_log_train : ",mse_log)) ;
+  print(paste("RMSE_log_train : ",rmse_log)) ;
+  print(paste("MAE_expo_train : ",mae_expo)) ;
+  print(paste("MSE_expo_train : ",mse_expo)) ;
+  print(paste("RMSE_expo_train : ",rmse_expo)) ;
+  print(paste("MAE_model : "  ,      M[[4]][[4]])) ;
+  print(paste("Rsquared_model : "  , M[[4]][[3]])) ;
+  print(paste("RMSE_model : " ,      M[[4]][[2]])) ;
+  list(mae_log, mse_log, rmse_log, mae_expo, mse_expo, rmse_expo)
+}
+
+r_test <- function(A,P,M = model) {
+  mae_log <- cal_mae(A$log_price, P)
+  mse_log <- cal_mse(A$log_price, P)
+  rmse_log <- cal_rmse(A$log_price, P)
+  mae_expo <- cal_mae(exp(A$log_price), exp(P))
+  mse_expo <- cal_mse(exp(A$log_price), exp(P))
+  rmse_expo <- cal_rmse(exp(A$log_price), exp(P))
+  print("--Evaulation of TEST--");
+  print(paste("MAE_log_test : ",mae_log)) ;
+  print(paste("MSE_log_test : ",mse_log)) ;
+  print(paste("RMSE_log_test : ",rmse_log)) ;
+  print(paste("MAE_expo_test : ",mae_expo)) ;
+  print(paste("MSE_expo_test : ",mse_expo)) ;
+  print(paste("RMSE_expo_test : ",rmse_expo)) ;
+  print(paste("MAE_model : "  ,      M[[4]][[4]])) ;
+  print(paste("Rsquared_model : "  , M[[4]][[3]])) ;
+  print(paste("RMSE_model : " ,      M[[4]][[2]])) ;
+  list(mae_log, mse_log, rmse_log, mae_expo, mse_expo, rmse_expo)
+}
+```
+
+### 1.5 Show error of model full df1 and real price
+```{r echo=TRUE}
+print(paste("MAE_test : "  , cal_mae(test_data$Price, p)))
+print(paste("MSE_test : "  , cal_mse(test_data$Price, p)))
+print(paste("RMSE_test : " , cal_rmse(test_data$Price, p)))
+print(paste("MAE_model : "  ,      model[[4]][[4]]))
+print(paste("Rsquared_model : "  , model[[4]][[3]]))
+print(paste("RMSE_model : " ,      model[[4]][[2]]))
+```
+##### The model(full data, real price) : high error compare train and test, Rsquared_model :  0.711036950308182
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -4,6 +4,7 @@ library(tidyverse)
 library(caret)
 library(mlbench)
 library(readxl)
+library(ggplot2)
 
 # Load data
 df1<-read_excel("hpi.xlsx", sheet = 1)
@@ -26,6 +27,21 @@ split_data <- function(df) {
 prep_data <- split_data(df1)
 train_data <- prep_data[[1]]
 test_data <- prep_data[[2]]
+
+# Visualized data ~ Price
+ggplot(df1, aes(Price/1000)) +
+  geom_histogram(bins = 100, fill="blue") +
+  theme_minimal() +
+  labs(
+    title = "Visualized Real price by histogram",
+    subtitle = "Right skew",
+    x = "Real price x1000",
+    caption = "Source: data.world"
+  )
+
+ggplot(df1_log, aes(log_price)) +
+  geom_histogram(bins = 100, fill="green") +
+  theme_minimal()
 
 # Train
 model <- train(Price ~ .,
@@ -91,6 +107,7 @@ r_test <- function(A,P,M = model) {
   list(mae_log, mse_log, rmse_log, mae_expo, mse_expo, rmse_expo)
 }
 
+# show error of model
 print(paste("MAE_test : "  , cal_mae(test_data$Price, p)))
 print(paste("MSE_test : "  , cal_mse(test_data$Price, p)))
 print(paste("RMSE_test : " , cal_rmse(test_data$Price, p)))
