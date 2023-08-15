@@ -3,8 +3,8 @@ title: "hw_house_price_india"
 author: "DataSloth"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}

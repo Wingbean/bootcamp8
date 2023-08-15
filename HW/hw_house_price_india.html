@@ -620,9 +620,9 @@ model_log &lt;- train(log_price ~ .,
 <h3>2.2.2.1 predict train model_log</h3>
 <pre class="r"><code>p_log_train &lt;- predict(model_log, newdata = train_data_log)</code></pre>
 </div>
-<div id="calculate-train-error-from-model_log-with-logarithm-price-and-real-priceexplog" class="section level3">
+<div id="calculate-train-error-from-model_log-with-logarithm-price-and-real-price_explog" class="section level3">
 <h3>2.2.2.2 calculate train error from “model_log” with logarithm price
-and real price[exp(log)]</h3>
+and real price_exp(log)</h3>
 <pre class="r"><code>model_log_r_train &lt;- r_train(train_data_log, p_log_train, model_log)</code></pre>
 <pre><code>## [1] &quot;--Evaulation of TRAIN--&quot;
 ## [1] &quot;MAE_log_train :  0.186876611630186&quot;
@@ -658,8 +658,7 @@ and real price[exp(log)]</h3>
 <h2>After train model use real price vs logarithm price, now find out
 the important variable for tuning the new model(“model_log_s”) for lower
 error or high accuracy</h2>
-<pre class="r"><code>print(&quot;variable importance of model&quot;)</code></pre>
-<pre><code>## [1] &quot;variable importance of model&quot;</code></pre>
+<pre><code>## [1] &quot;variable importance of --&gt; model&quot;</code></pre>
 <pre><code>## lm variable importance
 ## 
 ##                                                 Overall
@@ -682,6 +681,29 @@ error or high accuracy</h2>
 ## `\\`number of floors\\``                        3.27998
 ## `\\`lot area\\``                                0.04566
 ## `\\`Distance from the airport\\``               0.00000</code></pre>
+<pre><code>## [1] &quot;variable importance of --&gt; model_log&quot;</code></pre>
+<pre><code>## lm variable importance
+## 
+##                                                 Overall
+## Lattitude                                     100.00000
+## `\\`grade of the house\\``                     63.49513
+## `\\`Built Year\\``                             39.30658
+## `\\`living area\\``                            30.85679
+## `\\`condition of the house\\``                 25.85637
+## living_area_renov                              24.40844
+## `\\`number of views\\``                        23.01281
+## `\\`waterfront present\\``                     19.73784
+## `\\`number of bathrooms\\``                    18.30983
+## `\\`Postal Code\\``                            18.06680
+## `\\`number of floors\\``                       16.05220
+## `\\`Renovation Year\\``                        12.04673
+## `\\`lot area\\``                                7.21650
+## `\\`number of bedrooms\\``                      6.90855
+## Longitude                                       4.33343
+## `\\`Area of the house(excluding basement)\\``   1.72684
+## lot_area_renov                                  1.61028
+## `\\`Distance from the airport\\``               0.05296
+## `\\`Number of schools nearby\\``                0.00000</code></pre>
 </div>
 </div>
 
