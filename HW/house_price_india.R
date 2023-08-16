@@ -11,8 +11,8 @@ df1<-read_excel("hpi.xlsx", sheet = 1)
 df2<-read_excel("hpi.xlsx", sheet = 2)
 
 #complete date ?
-mean(complete.cases(df1))
-mean(complete.cases(df2))
+mean(complete.cases(df1)) #result should be 1
+mean(complete.cases(df2)) #result should be 1
 
 # Split full df1
 split_data <- function(df) {
@@ -38,10 +38,6 @@ ggplot(df1, aes(Price/1000)) +
     x = "Real price x1000",
     caption = "Source: data.world"
   )
-
-ggplot(df1_log, aes(log_price)) +
-  geom_histogram(bins = 100, fill="green") +
-  theme_minimal()
 
 # Train
 model <- train(Price ~ .,
@@ -115,12 +111,8 @@ print(paste("MAE_model : "  ,      model[[4]][[4]]))
 print(paste("Rsquared_model : "  , model[[4]][[3]]))
 print(paste("RMSE_model : " ,      model[[4]][[2]]))
 
-#cal_mae(test_data$Price, p)
-#cal_mse(test_data$Price, p)
-#cal_rmse(test_data$Price, p)
-
-varImp(model)
 ##-----------------------------------------##
+
 ## log price for correct rt skew
 
 df1_log <- df1 %>%
@@ -134,6 +126,11 @@ prep_data_log <- split_data(df1_log)
 train_data_log <- prep_data_log[[1]]
 test_data_log <- prep_data_log[[2]]
 
+# Visualized data ~ log_price
+ggplot(df1_log, aes(log_price)) +
+  geom_histogram(bins = 100, fill="green") +
+  theme_minimal()
+
 # Train + cal train error from exp(log)
 set.seed(42)
 model_log <- train(log_price ~ .,
@@ -143,14 +140,6 @@ model_log <- train(log_price ~ .,
 p_log_train <- predict(model_log, newdata = train_data_log)
 
 model_log_r_train <- r_train(train_data_log, p_log_train, model_log)
-#paste("MAE_expo_train : ", cal_mae(exp(train_data_log$log_price), exp(p_log_train)))
-#paste("MSE_expo_train : ", cal_mse(exp(train_data_log$log_price), exp(p_log_train)))
-#paste("RMSE_expo_train : ", cal_rmse(exp(train_data_log$log_price), exp(p_log_train)))
-#paste("MAE_log_train : ", cal_mae(train_data_log$log_price, p_log_train))
-#paste("MSE_log_train : ", cal_mse(train_data_log$log_price, p_log_train))
-#paste("RMSE_log_train : ", cal_rmse(train_data_log$log_price, p_log_train))
-
-varImp(model_log)
 
 # score predict
 p_log_test <- predict(model_log, newdata = test_data_log)
@@ -158,23 +147,18 @@ p_log_test <- predict(model_log, newdata = test_data_log)
 # Evaluate expo log
 model_log_r_test <- r_test(test_data_log, p_log_test, model_log)
 
-#paste("MAE_expo_test : ", cal_mae(exp(test_data_log$log_price), exp(p_log_test)))
-#paste("MSE_expo_test : ", cal_mse(exp(test_data_log$log_price), exp(p_log_test)))
-#paste("RMSE_expo_test : ", cal_rmse(exp(test_data_log$log_price), exp(p_log_test)))
-#paste("MAE_expo_train : ", cal_mae(exp(train_data_log$log_price), exp(p_log_train)))
-#paste("MSE_expo_train : ", cal_mse(exp(train_data_log$log_price), exp(p_log_train)))
-#paste("RMSE_expo_train : ", cal_rmse(exp(train_data_log$log_price), exp(p_log_train)))
-#paste("MAE_log_test : ", cal_mae(test_data_log$log_price, p_log_test))
-#paste("MSE_log_test : ", cal_mse(test_data_log$log_price, p_log_test))
-#paste("RMSE_log_test : ", cal_rmse(test_data_log$log_price, p_log_test))
-#paste("MAE_log_train : ", cal_mae(train_data_log$log_price, p_log_train))
-#paste("MSE_log_train : ", cal_mse(train_data_log$log_price, p_log_train))
-#paste("RMSE_log_train : ", cal_rmse(train_data_log$log_price, p_log_train))
+
 
 
 ##-----------------------------------------##
 # select varImp from above model for create new model
-# subset data to df1_s
+
+print("variable importance of --> model")
+print(varImp(model))
+print("variable importance of --> model_log")
+print(varImp(model_log))
+
+# subset data df1_log use 5 imp var to df1_s 
 
 df1_s <- df1_log %>%
   select(lat = Lattitude,
@@ -197,29 +181,11 @@ p_log_s_train <- predict(model_log_s, newdata = train_data_s)
 ## evaluate train model_log_s
 model_log_s_r_train <- r_train(train_data_s, p_log_s_train, model_log_s)
 
-#paste("MAE_log_s_train : ", cal_mae(train_data_s$log_price, p_log_s_train))
-#paste("MSE_log_s_train : ", cal_mse(train_data_s$log_price, p_log_s_train))
-#paste("RMSE_log_s_train : ", cal_rmse(train_data_s$log_price, p_log_s_train))
-#paste("MAE_expo_s_train : ", cal_mae(exp(train_data_s$log_price), exp(p_log_s_train)))
-#paste("MSE_expo_s_train : ", cal_mse(exp(train_data_s$log_price), exp(p_log_s_train)))
-#paste("RMSE_expo_s_train : ", cal_rmse(exp(train_data_s$log_price), exp(p_log_s_train)))
-
 # test model_log_s
 p_log_s_test <- predict(model_log_s, newdata = test_data_s)
 
 # evaluate test model_log_s
 model_log_s_r_test <- r_test(test_data_s, p_log_s_test, model_log_s)
-
-#paste("MAE_log_s_test : ", cal_mae(test_data_s$log_price, p_log_s_test))
-#paste("MSE_log_s_test : ", cal_mse(test_data_s$log_price, p_log_s_test))
-#paste("RMSE_log_s_test : ", cal_rmse(test_data_s$log_price, p_log_s_test))
-#paste("MAE_expo_s_test : ", cal_mae(exp(test_data_s$log_price), exp(p_log_s_test)))
-#paste("MSE_expo_s_test : ", cal_mse(exp(test_data_s$log_price), exp(p_log_s_test)))
-#paste("RMSE_expo_s_test : ", cal_rmse(exp(test_data_s$log_price), exp(p_log_s_test)))
-
-##-----------------------------------------##
-##-----------------------------------------##
-##-----------------------------------------##
 
 #~~~~~~~~~~~~~~~~Final model~~~~~~~~~~~~~~~~#
 
@@ -245,114 +211,12 @@ p_lm_final_train <- predict(model_lm_final, newdata = train_data_s)
 
 model_lm_final_r_train <- r_train(train_data_s, p_lm_final_train, model_lm_final)
 
-#paste("MAE_log_s_train : ", cal_mae(train_data_s$log_price, p_log_s_train))
-#paste("MSE_log_s_train : ", cal_mse(train_data_s$log_price, p_log_s_train))
-#paste("RMSE_log_s_train : ", cal_rmse(train_data_s$log_price, p_log_s_train))
-#paste("MAE_expo_s_train : ", cal_mae(exp(train_data_s$log_price), exp(p_log_s_train)))
-#paste("MSE_expo_s_train : ", cal_mse(exp(train_data_s$log_price), exp(p_log_s_train)))
-#paste("RMSE_expo_s_train : ", cal_rmse(exp(train_data_s$log_price), exp(p_log_s_train)))
-
-
 # test model_lm_final
 p_lm_final_test <- predict(model_lm_final, newdata = test_data_s)
 
 # evaluate test model_log_s
 
 model_lm_final_r_test <- r_test(test_data_s, p_lm_final_test, model_lm_final)
-
-#paste("MAE_log_s_test : ", cal_mae(test_data_s$log_price, p_log_s_test))
-#paste("MSE_log_s_test : ", cal_mse(test_data_s$log_price, p_log_s_test))
-#paste("RMSE_log_s_test : ", cal_rmse(test_data_s$log_price, p_log_s_test))
-#paste("MAE_expo_s_test : ", cal_mae(exp(test_data_s$log_price), exp(p_log_s_test)))
-#paste("MSE_expo_s_test : ", cal_mse(exp(test_data_s$log_price), exp(p_log_s_test)))
-#paste("RMSE_expo_s_test : ", cal_rmse(exp(test_data_s$log_price), exp(p_log_s_test)))
-
-##-----------------------------------------##
-##----------Summary Evaluation-------------##
-
-#create vector model, model_log, model_log_s, model_lm_final
-model_name <- c("model",
-                "model_log",
-                "model_log_s",
-                "model_lm_final")
-
-#create vector MAE-train/test, MSE-train/test, RMSE-train/test, Rsquared train
-mae_train_log <- c(0,
-                   model_log_r_train[[1]],
-                   model_log_s_r_train[[1]],
-                   model_lm_final_r_train[[1]])
-
-mae_train <- c(model[[4]][[4]],
-               model_log_r_train[[4]],
-               model_log_s_r_train[[4]],
-               model_lm_final_r_train[[4]])
-
-mae_test_log <- c(0,
-                  model_log_r_test[[1]],
-                  model_log_s_r_test[[1]],
-                  model_lm_final_r_test[[1]])
-
-mae_test <- c(model[[4]][[4]],
-              model_log_r_test[[4]],
-              model_log_s_r_test[[4]],
-              model_lm_final_r_test[[4]])
-
-mse_train_log <- c(0, 
-                   model_log_r_train[[2]], 
-                   model_log_s_r_train[[2]], 
-                   model_lm_final_r_train[[2]])
-
-mse_train <- c(0, 
-               model_log_r_train[[5]], 
-               model_log_s_r_train[[5]], 
-               model_lm_final_r_train[[5]])
-
-mse_test_log <- c(0, 
-                  model_log_r_test[[2]], 
-                  model_log_s_r_test[[2]], 
-                  model_lm_final_r_test[[2]])
-
-mse_test <- c(0, 
-              model_log_r_test[[5]], 
-              model_log_s_r_test[[5]], 
-              model_lm_final_r_test[[5]])
-
-
-rmse_train_log <- c(0, 
-                    model_log_r_train[[3]], 
-                    model_log_s_r_train[[3]], 
-                    model_lm_final_r_train[[3]])
-
-rmse_train <- c(model[[4]][[2]], 
-                model_log_r_train[[6]], 
-                model_log_s_r_train[[6]], 
-                model_lm_final_r_train[[6]])
-
-rmse_test_log <- c(0, 
-                   model_log_r_test[[3]], 
-                   model_log_s_r_test[[3]], 
-                   model_lm_final_r_test[[3]])
-
-rmse_test <- c(model[[4]][[2]], 
-               model_log_r_test[[6]], 
-               model_log_s_r_test[[6]], 
-               model_lm_final_r_test[[6]])
-
-rsquared_model_train <- c(model[[4]][[3]], 
-                          model_log[[4]][[3]], 
-                          model_log_s[[4]][[3]], 
-                          model_lm_final[[4]][[3]])
-
-#then create df to compare evaluation
-
-sum_eva <- data.frame(model_name,
-                 mae_train_log, mae_train, 
-                 mae_test_log, mae_test, 
-                 mse_train_log, mse_train, 
-                 mse_test_log, mse_test,
-                 rmse_train_log, rmse_train, 
-                 rmse_test_log, rmse_test,
-                 rsquared_model_train)
 
 ##---------switch method to knn-------------##
 
@@ -376,6 +240,9 @@ p_knn_final_test <- predict(model_knn_final, newdata = test_data_s)
 # evaluate test model_knn_final
 
 model_knn_final_r_test <- r_test(test_data_s, p_knn_final_test, model_knn_final)
+
+##-----------------------------------------##
+##----------Summary Evaluation-------------##
 
 #create vector model, model_log, model_log_s, model_lm_final, model_knn_final
 model_name <- c("model",
@@ -463,4 +330,14 @@ rsquared_model_train <- c(model[[4]][[3]],
                           model_lm_final[[4]][[3]],
                           model_knn_final[[4]][[3,3]])
 
-model_knn_final
+sum_eva <- data.frame(model_name,
+                      mae_train_log, mae_train, 
+                      mae_test_log, mae_test, 
+                      mse_train_log, mse_train, 
+                      mse_test_log, mse_test,
+                      rmse_train_log, rmse_train, 
+                      rmse_test_log, rmse_test,
+                      rsquared_model_train)
+
+print(sum_eva)
+print(model_knn_final)
