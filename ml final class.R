@@ -34,16 +34,35 @@ glmnet_model <- train(diabetes ~ .,
 
 install.packages("rpart")
 library(rpart)
+library(rpart.plot)
 
 tree_model <- train(diabetes ~ .,
                       data = train_data,
                       method = "rpart",
+                      tuneGrid = expand.grid(cp=c(0.02,0.1,0.25)),
                       trControl = ctrl)
 
 # score
-p<- predict(glmnet_model, newdata = test_data)
+p<- predict(rf_model, newdata = test_data)
 
 # evaluate
 confusionMatrix(p, reference = test_data$diabetes,
                 positive =  "pos",
                 mode = "prec_recall")
+
+# rpart plot
+rpart.plot(tree_model$finalModel)
+
+# random forest model
+# mtyr hyperparameter
+
+rf_model <- train(diabetes ~ . ,
+                  data = train_data,
+                  method = "rf",
+                  tuneLength = 5,
+                  trControl = ctrl)
+rf_model
+
+
+
+
