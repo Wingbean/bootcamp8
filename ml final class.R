@@ -30,6 +30,16 @@ glmnet_model <- train(diabetes ~ .,
                         tuneGrid = my_grid,
                         trControl = ctrl)
 
+# rpart decision tree
+
+install.packages("rpart")
+library(rpart)
+
+tree_model <- train(diabetes ~ .,
+                      data = train_data,
+                      method = "rpart",
+                      trControl = ctrl)
+
 # score
 p<- predict(glmnet_model, newdata = test_data)
 
