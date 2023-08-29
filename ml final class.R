@@ -115,3 +115,44 @@ list_models = list(
 result <- resamples(list_models)
 
 summary(result)
+
+# K-Mean------------------
+
+## k-means for clustering (aka. segmentation)
+## load data from `mlbench` library
+data("BostonHousing")
+
+## rename dataset
+df <- BostonHousing
+glimpse(df)
+
+## subset columns
+subset_df <- df %>%
+  select(crim, rm, age, lstat, medv) %>%
+  as_tibble()
+
+## test different k (k= 2-5)
+km_result <- kmeans(x = subset_df, centers = 5) #center ต้องกำหนดเอง
+
+## membership [1,2,3,4,5]
+subset_df$cluster <- km_result$cluster
+
+subset_df %>%
+  group_by(cluster) %>%
+  summarise(avg_price = mean(medv),
+            avg_rooms = mean(rm))
+
+# normalization min max scaling
+normalize_data <- function(x){
+  (x-min(x)) / (max(x) - min(x))
+}
+
+normalize_data(subset_df$medv)
+
+# apply to all column in dataframe
+subset_df_norm <- apply(subset_df, MARGIN = 2, normalize_data)
+
+
+
+
+
