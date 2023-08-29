@@ -63,6 +63,55 @@ rf_model <- train(diabetes ~ . ,
                   trControl = ctrl)
 rf_model
 
+# resample() => compare model performance
+# predict diabetes
+
+model1 <- train(diabetes ~ .,
+                data = train_data,
+                method = "glm",
+                trControl = trainControl(
+                  method = "cv", number = 5
+                  ))
+
+model2 <- train(diabetes ~ .,
+                data = train_data,
+                method = "rpart",
+                trControl = trainControl(
+                  method = "cv", number = 5
+                ))
+
+model3 <- train(diabetes ~ .,
+                data = train_data,
+                method = "rf",
+                trControl = trainControl(
+                  method = "cv", number = 5
+                ))
+
+model4 <- train(diabetes ~ .,
+                data = train_data,
+                method = "glmnet",
+                trControl = trainControl(
+                  method = "cv", number = 5
+                ))
+
+model5 <- train(diabetes ~ .,
+                data = train_data,
+                method = "nnet",
+                trControl = trainControl(
+                  method = "cv", number = 5
+                ))
 
 
+# resamples
 
+list_models = list(
+  logistic = model1,
+  tree = model2,
+  randomForest = model3,
+  glmnet = model4,
+  nnet = model5
+)
+
+result <- resamples(list_models)
+
+summary(result)
